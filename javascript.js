@@ -8,6 +8,10 @@ canvas.height = 540;
 const cw = canvas.width;
 const ch = canvas.height;
 
+
+
+
+
 var player = "cros";
 var computer = "circle";
 
@@ -19,12 +23,12 @@ var pos1Y = 455;
 //I(90,90),II(80, 270), III(80, 450); II row(80, 270, 450)
 
 //cordinates of the x middle X 350, Y 190 
-
+/*
 var X = 170;
 var Y = 10;
 var X2 = 190;
 var Y2 = 360;
-/*
+
 // I (
 var X = 170;
 var Y = 10;
@@ -98,7 +102,23 @@ function lines() {
     ctx.fillRect(0, 364, 540, 4);
 }
 
-function eks() {
+function eks(x, y) {
+
+    if (y <= 171 && x <= 171) {
+        // I pozycja
+        var X = 170;
+        var Y = 10;
+        var X2 = 170;
+        var Y2 = 10;
+    } else if (y <= 171 && x <= 370) {
+        //IV pozycja
+        var X = 170;
+        var Y = 10;
+        var X2 = 190;
+        var Y2 = 360;
+    } else {
+        return false;
+    }
     ctx.moveTo(X2, Y);
     ctx.lineTo(Y2, X);
 
@@ -119,10 +139,29 @@ function ring(corX, corY) {
     ctx.stroke();
     ctx.strokeStyle = "black";
 }
+//mousemove to get cors while moving mouse; get pos on click
+function playerClick() {
+    canvas.addEventListener('click', function (evt) {
+        var mousePos = getMousePos(canvas, evt);
+        var message = 'Mouse position: ' + mousePos.x + ' :X' + ',' + mousePos.y + ' :Y';
 
+        eks(mousePos.x, mousePos.y)
+        console.log(message);
+    }, false);
+}
+
+//gets mouse position
+function getMousePos(canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+        x: Math.round((evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width),
+        y: Math.round((evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height)
+    };
+}
+
+//draws a game
 function game() {
     lines();
     ring(pos1X, pos1Y);
-    eks();
-
+    playerClick();
 }
