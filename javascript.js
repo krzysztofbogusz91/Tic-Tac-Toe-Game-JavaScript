@@ -127,6 +127,52 @@ function clearAll() {
 
 //start writing the logic;
 function computerMoves() {
+    var x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
+    var y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
+    var val = "XX"
+
+    if (y <= 171 && x <= 171) {
+        val = "I";
+
+    } else if (y <= 171 && x <= 370) {
+        val = "IV";
+
+    } else if (y <= 171 && x <= 530) {
+        val = "VII";
+
+    } else if (y <= 350 && x <= 171) {
+        val = "II";
+
+    } else if (y <= 350 && x <= 370) {
+        val = "V";
+
+    } else if (y <= 350 && x <= 530) {
+        val = "VIII";
+
+    } else if (y <= 530 && x <= 171) {
+        val = "III";
+
+    } else if (y <= 530 && x <= 370) {
+        val = "VI";
+
+    } else if (y <= 530 && x <= 530) {
+        val = "IX";
+
+    } else {
+        return false;
+    }
+
+    if (circleCordsMemo.indexOf(val) === -1 && crosCordsMemo.indexOf(val) === -1) {
+
+        ring(x, y);
+        cliked = false;
+
+
+    } else {
+
+        return computerMoves();
+    }
+
 
 }
 
