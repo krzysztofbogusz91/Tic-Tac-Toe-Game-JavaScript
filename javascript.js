@@ -20,6 +20,7 @@ var computer = "circle";
 
 //making sure player moves only onece
 var cliked = false;
+var computerClick = false;
 
 //saves all player and computer movments in memry;
 var crosCordsMemo = [];
@@ -127,51 +128,65 @@ function clearAll() {
 
 //start writing the logic;
 function computerMoves() {
+
+    var val = "I"
+
     var x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
     var y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-    var val = "XX"
 
-    if (y <= 171 && x <= 171) {
+    if (y <= 171 && x <= 171 && !circleCordsMemo.indexOf(val) && !crosCordsMemo.indexOf(val)) {
         val = "I";
+        x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
+        y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
 
-    } else if (y <= 171 && x <= 370) {
+    } else if (y <= 171 && x <= 370 && !circleCordsMemo.indexOf(val) && !crosCordsMemo.indexOf(val)) {
         val = "IV";
+        x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
+        y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
 
-    } else if (y <= 171 && x <= 530) {
+    } else if (y <= 171 && x <= 530 && !circleCordsMemo.indexOf(val) && !crosCordsMemo.indexOf(val)) {
         val = "VII";
+        x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
+        y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
 
-    } else if (y <= 350 && x <= 171) {
+    } else if (y <= 350 && x <= 171 && !circleCordsMemo.indexOf(val) && !crosCordsMemo.indexOf(val)) {
         val = "II";
+        x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
+        y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
 
-    } else if (y <= 350 && x <= 370) {
+    } else if (y <= 350 && x <= 370 && !circleCordsMemo.indexOf(val) && !crosCordsMemo.indexOf(val)) {
         val = "V";
+        x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
+        y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
 
-    } else if (y <= 350 && x <= 530) {
+    } else if (y <= 350 && x <= 530 && !circleCordsMemo.indexOf(val) && !crosCordsMemo.indexOf(val)) {
         val = "VIII";
+        x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
+        y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
 
-    } else if (y <= 530 && x <= 171) {
+    } else if (y <= 530 && x <= 171 && !circleCordsMemo.indexOf(val) && !crosCordsMemo.indexOf(val)) {
         val = "III";
+        x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
+        y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
 
-    } else if (y <= 530 && x <= 370) {
+    } else if (y <= 530 && x <= 370 && !circleCordsMemo.indexOf(val) && !crosCordsMemo.indexOf(val)) {
         val = "VI";
+        x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
+        y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
 
-    } else if (y <= 530 && x <= 530) {
+    } else if (y <= 530 && x <= 530 && !circleCordsMemo.indexOf(val) && !crosCordsMemo.indexOf(val)) {
         val = "IX";
+        x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
+        y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
 
-    } else {
-        return false;
     }
+    console.log(circleCordsMemo.indexOf(val));
+    console.log(val);
 
-    if (circleCordsMemo.indexOf(val) === -1 && crosCordsMemo.indexOf(val) === -1) {
-
-        ring(x, y);
-        cliked = false;
+    ring(x, y);
 
 
-    } else {
 
-        return computerMoves();
-    }
 
 
 }
@@ -326,6 +341,11 @@ function getMousePos(canvas, evt) {
         y: Math.round((evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height)
     };
 }
+//function for clearing cliked vars so palyer can move again;
+function deblock() {
+    cliked = false;
+    computerClick = false;
+}
 
 //mousemove to get cors while moving mouse; get pos on click
 function playerClick() {
@@ -339,12 +359,17 @@ function playerClick() {
             console.log(crosCordsMemo);
             //changes cliked so player can have only one move!
             cliked = true;
+
         } else if (!cliked) {
             ring(mousePos.x, mousePos.y);
         }
         console.log(message);
-    }, false);
+        if (computerClick === false) {
+            computerMoves();
+            computerClick = true;
+        }
 
+    }, false);
 
 
 }
@@ -353,6 +378,7 @@ function playerClick() {
 function game() {
     lines();
     playerClick();
+    deblock();
     victoryOptions(crosCordsMemo);
     victoryOptions(circleCordsMemo);
 }
