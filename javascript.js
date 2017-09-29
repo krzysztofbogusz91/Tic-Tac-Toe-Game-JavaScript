@@ -27,68 +27,12 @@ var crosCordsMemo = [];
 var circleCordsMemo = [];
 
 
-//cordinates of the x middle X 350, Y 190 
-/*
-var X = 170;
-var Y = 10;
-var X2 = 190;
-var Y2 = 360;
+var x;
+var y;
+var arrCords = [];
 
-// I (
-var X = 170;
-var Y = 10;
-var X2 = 170;
-var Y2 = 10;
-) 
-II(
-var X = 350;
-var Y = 190;
-var X2 =170;
-var Y2 = 20;
-)
-III(
-var X = 530;
-var Y = 370;
-var X2 = 170;
-var Y2 = 20;
-)
+var val = "X";
 
-IV(
-
-var X = 170;
-var Y = 10;
-var X2 = 190;
-var Y2 = 360;
-
-)
-V(
-var X = 350;
-var Y = 190;
-var X2 = 360;
-var Y2 = 190;
-)
-VI(
-var X = 530;
-var Y = 370;
-var X2 = 360;
-var Y2 = 190;
-)
-VII(
-var X = 170;
-var Y = 10;
-var X2 = 530;
-var Y2 = 370;
-)
-VIII(
-var X = 350;
-var Y = 190;
-var X2 = 530;
-var Y2 = 370;
-
-)
-IX ( X,X2 = 530; Y,Y2 = 370)
-
-*/
 //sets game timmig; 
 setInterval(game, 1000 / 60);
 
@@ -126,70 +70,59 @@ function clearAll() {
 
 }
 
+function getNewCords() {
+    x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
+    y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
+    return arrCords = [x, y];
+}
+
+
 //start writing the logic;
 function computerMoves() {
 
-    var val = "I"
+    getNewCords();
+    x = arrCords[0];
+    y = arrCords[1];
 
-    var x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-    var y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-
-    if (y <= 171 && x <= 171 && !circleCordsMemo.indexOf(val) && !crosCordsMemo.indexOf(val)) {
+    if (y <= 171 && x <= 171) {
         val = "I";
-        x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-        y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-
-    } else if (y <= 171 && x <= 370 && !circleCordsMemo.indexOf(val) && !crosCordsMemo.indexOf(val)) {
+    } else if (y <= 171 && x <= 370) {
         val = "IV";
-        x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-        y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-
-    } else if (y <= 171 && x <= 530 && !circleCordsMemo.indexOf(val) && !crosCordsMemo.indexOf(val)) {
+    } else if (y <= 171 && x <= 530) {
         val = "VII";
-        x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-        y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-
-    } else if (y <= 350 && x <= 171 && !circleCordsMemo.indexOf(val) && !crosCordsMemo.indexOf(val)) {
+    } else if (y <= 350 && x <= 171) {
         val = "II";
-        x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-        y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-
-    } else if (y <= 350 && x <= 370 && !circleCordsMemo.indexOf(val) && !crosCordsMemo.indexOf(val)) {
+    } else if (y <= 350 && x <= 370) {
         val = "V";
-        x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-        y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-
-    } else if (y <= 350 && x <= 530 && !circleCordsMemo.indexOf(val) && !crosCordsMemo.indexOf(val)) {
+    } else if (y <= 350 && x <= 530) {
         val = "VIII";
-        x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-        y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-
-    } else if (y <= 530 && x <= 171 && !circleCordsMemo.indexOf(val) && !crosCordsMemo.indexOf(val)) {
+    } else if (y <= 530 && x <= 171) {
         val = "III";
-        x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-        y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-
-    } else if (y <= 530 && x <= 370 && !circleCordsMemo.indexOf(val) && !crosCordsMemo.indexOf(val)) {
+    } else if (y <= 530 && x <= 370) {
         val = "VI";
-        x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-        y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-
-    } else if (y <= 530 && x <= 530 && !circleCordsMemo.indexOf(val) && !crosCordsMemo.indexOf(val)) {
+    } else if (y <= 530 && x <= 530) {
         val = "IX";
-        x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-        y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
+    }
+
+    //for computer moves function
+    console.log(x + " " + y + val);
+
+    while (circleCordsMemo.indexOf(val) === -1 && crosCordsMemo.indexOf(val) === -1) {
+
+        circleCordsMemo.push(val);
+        ring(arrCords[0], arrCords[1]);
 
     }
-    console.log(circleCordsMemo.indexOf(val));
-    console.log(val);
-
-    ring(x, y);
-
-
-
-
+    console.log(x + " " + y + val + circleCordsMemo);
 
 }
+
+function computerSaveToArr() {
+    getNewCords();
+    computerMoves();
+
+}
+
 
 function lines() {
     //lines Y
@@ -278,47 +211,47 @@ function ring(x, y) {
 
 
     if (y <= 171 && x <= 171) {
-        circleCordsMemo.push("I");
+
         var corX = 90;
         var corY = 90;
     } else if (y <= 171 && x <= 370) {
         //IV pozycja
-        circleCordsMemo.push("IV");
+
         var corX = 270;
         var corY = 90;
     } else if (y <= 171 && x <= 530) {
         //VII pozycja
-        circleCordsMemo.push("VII");
+
         var corX = 450;
         var corY = 90;
     } else if (y <= 350 && x <= 171) {
         // II pozycja
-        circleCordsMemo.push("II");
+
         var corX = 90;
         var corY = 270;
     } else if (y <= 350 && x <= 370) {
         //V pozycja
-        circleCordsMemo.push("V");
+
         var corX = 270;
         var corY = 270;
     } else if (y <= 350 && x <= 530) {
         //VIII pozycja
-        circleCordsMemo.push("VIII");
+
         var corX = 450;
         var corY = 270;
     } else if (y <= 530 && x <= 171) {
         // III pozycja
-        circleCordsMemo.push("III");
+
         var corX = 90;
         var corY = 450;
     } else if (y <= 530 && x <= 370) {
         //VI pozycja
-        circleCordsMemo.push("VI");
+
         var corX = 270;
         var corY = 450;
     } else if (y <= 530 && x <= 530) {
         //IX pozycja
-        circleCordsMemo.push("IX");
+
         var corX = 450;
         var corY = 450;
     } else {
@@ -365,7 +298,13 @@ function playerClick() {
         }
         console.log(message);
         if (computerClick === false) {
-            computerMoves();
+            // prevents from blocking player move on the last spot may be need to change for the first player when comp starts than player has 4 moves....
+            if (circleCordsMemo.length < 4) {
+                // makes sure computer always draws an circle loops unitl it find the empty spot;
+                while (crosCordsMemo.length > circleCordsMemo.length) {
+                    computerMoves();
+                }
+            }
             computerClick = true;
         }
 
