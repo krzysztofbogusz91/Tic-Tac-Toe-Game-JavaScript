@@ -5,6 +5,7 @@
 // need to write logic for computer moves
 //
 
+
 var canvas = document.getElementById('myCanvas');
 var ctx = canvas.getContext('2d');
 
@@ -34,14 +35,19 @@ var arrCords = [];
 var val = "X";
 
 //sets game timmig; 
-setInterval(game, 1000 / 60);
+
+var inter = setInterval(game, 1000 / 60);
+
 
 //will look trough arrays for pattern maching if any of winng options will exisit it will pass mesege;
 function victoryOptions(arr) {
 
     var winner = "";
-
-    if (arr === crosCordsMemo) {
+    if (arr.length > 5) {
+        winner = "REMIS";
+        alert(winner);
+        clearAll();
+    } else if (arr === crosCordsMemo) {
         winner = "CROS";
     } else {
         winner = "CIRCLE";
@@ -67,6 +73,12 @@ function victoryOptions(arr) {
 //function for clearing up the board!
 
 function clearAll() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    val = "X";
+    cliked = false;
+    computerClick = false;
+    x;
+    y;
 
 }
 
@@ -104,16 +116,11 @@ function computerMoves() {
         val = "IX";
     }
 
-    //for computer moves function
-    console.log(x + " " + y + val);
-
     while (circleCordsMemo.indexOf(val) === -1 && crosCordsMemo.indexOf(val) === -1) {
-
         circleCordsMemo.push(val);
         ring(arrCords[0], arrCords[1]);
-
     }
-    console.log(x + " " + y + val + circleCordsMemo);
+
 
 }
 
