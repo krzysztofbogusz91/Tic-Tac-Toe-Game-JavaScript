@@ -1,20 +1,40 @@
-<!DOCTYPE html>
-<html lang="">
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Random quote</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Condensed" rel="stylesheet">
+    <link rel="stylesheet" href="css.css">
+
 </head>
 
 <body>
+    <div class="wrapper">
+        <div class="head">
+            <h2>Random Quote for today:</h2>
+        </div>
+        <div class="area">
+            <div id="quote">
+                <p id="quote-text" class="quote-text "></p>
+                <p id="author-text" class="author-text "></p>
+            </div>
+            <div class="share ">
+                <button type="button " id="qu">New Quote</button>
 
-    <canvas id="myCanvas"></canvas>
+                <!--twitter button-->
+                <a class="twitter-share-button " id="link" data-size="large " target="_blank ">
+                    <button type="button " id="as">Tweet it!</button></a>
 
 
+            </div>
 
-    <script src="javascript.js"></script>
+        </div>
+
+    </div>
+
+    <script src="js.js "></script>
 </body>
 
 </html>
