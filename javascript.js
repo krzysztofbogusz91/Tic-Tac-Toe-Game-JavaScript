@@ -27,12 +27,21 @@ var computerClick = false;
 var crosCordsMemo = [];
 var circleCordsMemo = [];
 
+//pop used vals from usedSpots
+//clear all the empty spots
+
+//dell it
+var usedSpots = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+
 
 var x;
 var y;
+
+//set up cords for drawing ciompue cords
 var arrCords = [];
 
-var val = "X";
+var valCo = "X";
+var valPl = "X";
 
 //sets game timmig; 
 
@@ -74,18 +83,31 @@ function victoryOptions(arr) {
 
 function clearAll() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    val = "X";
+    valCo = "X";
     cliked = false;
     computerClick = false;
     x;
     y;
-
+    window.location.reload(true);
 }
 
 function getNewCords() {
     x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
     y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
     return arrCords = [x, y];
+}
+
+//dell it
+function clearEmptySpots(arr) {
+    //pop used vals from usedSpots
+    //clear all the empty spots
+    //set up cords for empty spoots
+    if (arr.indexOf(valCo) === -1) {
+
+        //clear all empty spots
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
 }
 
 
@@ -97,27 +119,27 @@ function computerMoves() {
     y = arrCords[1];
 
     if (y <= 171 && x <= 171) {
-        val = "I";
+        valCo = "I";
     } else if (y <= 171 && x <= 370) {
-        val = "IV";
+        valCo = "IV";
     } else if (y <= 171 && x <= 530) {
-        val = "VII";
+        valCo = "VII";
     } else if (y <= 350 && x <= 171) {
-        val = "II";
+        valCo = "II";
     } else if (y <= 350 && x <= 370) {
-        val = "V";
+        valCo = "V";
     } else if (y <= 350 && x <= 530) {
-        val = "VIII";
+        valCo = "VIII";
     } else if (y <= 530 && x <= 171) {
-        val = "III";
+        valCo = "III";
     } else if (y <= 530 && x <= 370) {
-        val = "VI";
+        valCo = "VI";
     } else if (y <= 530 && x <= 530) {
-        val = "IX";
+        valCo = "IX";
     }
 
-    while (circleCordsMemo.indexOf(val) === -1 && crosCordsMemo.indexOf(val) === -1) {
-        circleCordsMemo.push(val);
+    while (circleCordsMemo.indexOf(valCo) === -1 && crosCordsMemo.indexOf(valCo) === -1) {
+        circleCordsMemo.push(valCo);
         ring(arrCords[0], arrCords[1]);
     }
 
@@ -147,6 +169,8 @@ function lines() {
 }
 
 function eks(x, y) {
+
+
 
     if (y <= 171 && x <= 171) {
         crosCordsMemo.push("I");
@@ -205,6 +229,9 @@ function eks(x, y) {
     } else {
         return false;
     }
+
+
+
     ctx.moveTo(X2, Y);
     ctx.lineTo(Y2, X);
 
@@ -261,8 +288,6 @@ function ring(x, y) {
 
         var corX = 450;
         var corY = 450;
-    } else {
-        return false;
     }
 
 
@@ -293,7 +318,11 @@ function playerClick() {
         var mousePos = getMousePos(canvas, evt);
         var message = 'Mouse position: ' + mousePos.x + ' :X' + ',' + mousePos.y + ' :Y';
 
+        playerCheckSpot(x, y)
+
+
         if (player === "cros" && !cliked) {
+
             eks(mousePos.x, mousePos.y)
 
             console.log(crosCordsMemo);
@@ -318,6 +347,40 @@ function playerClick() {
     }, false);
 
 
+}
+
+//cheks if player spots is empty
+function playerCheckSpot(x, y) {
+
+    if (y <= 171 && x <= 171) {
+        valPl = "I";
+        console.log(valPl);
+
+    } else if (y <= 171 && x <= 370) {
+        valPl = "IV";
+
+    } else if (y <= 171 && x <= 530) {
+        valPl = "VI";
+
+    } else if (y <= 350 && x <= 171) {
+        valPl = "II";
+
+    } else if (y <= 350 && x <= 370) {
+        valPl = "V";
+
+    } else if (y <= 350 && x <= 530) {
+        valPl = "VI";
+
+    } else if (y <= 530 && x <= 171) {
+        valPl = "II";
+
+    } else if (y <= 530 && x <= 370) {
+        valPl = "VI";
+
+    } else if (y <= 530 && x <= 530) {
+        valPl = "IX";
+
+    }
 }
 
 //draws a game
