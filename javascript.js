@@ -24,15 +24,8 @@ var cliked = false;
 var computerClick = false;
 
 //saves all player and computer movments in memry;
-var crosCordsMemo = [];
-var circleCordsMemo = [];
-
-//pop used vals from usedSpots
-//clear all the empty spots
-
-//dell it
-var usedSpots = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
-
+var playerCordsMemo = [];
+var computerCordsMemo = [];
 
 var x;
 var y;
@@ -56,10 +49,10 @@ function victoryOptions(arr) {
         winner = "REMIS";
         alert(winner);
         clearAll();
-    } else if (arr === crosCordsMemo) {
-        winner = "CROS";
+    } else if (arr === playerCordsMemo) {
+        winner = "Player";
     } else {
-        winner = "CIRCLE";
+        winner = "Computer";
     }
 
     if (arr.indexOf("I") >= 0 && arr.indexOf("II") >= 0 && arr.indexOf("III") >= 0 ||
@@ -71,8 +64,8 @@ function victoryOptions(arr) {
         arr.indexOf("I") >= 0 && arr.indexOf("V") >= 0 && arr.indexOf("IX") >= 0 ||
         arr.indexOf("VII") >= 0 && arr.indexOf("V") >= 0 && arr.indexOf("III") >= 0) {
         alert(winner + " " + "wins the game!");
-        crosCordsMemo = [];
-        circleCordsMemo = [];
+        playerCordsMemo = [];
+        computerCordsMemo = [];
         clearAll();
 
     }
@@ -96,20 +89,6 @@ function getNewCords() {
     y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
     return arrCords = [x, y];
 }
-
-//dell it
-function clearEmptySpots(arr) {
-    //pop used vals from usedSpots
-    //clear all the empty spots
-    //set up cords for empty spoots
-    if (arr.indexOf(valCo) === -1) {
-
-        //clear all empty spots
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
-}
-
 
 //start writing the logic;
 function computerMoves() {
@@ -138,17 +117,11 @@ function computerMoves() {
         valCo = "IX";
     }
 
-    while (circleCordsMemo.indexOf(valCo) === -1 && crosCordsMemo.indexOf(valCo) === -1) {
-        circleCordsMemo.push(valCo);
+    while (computerCordsMemo.indexOf(valCo) === -1 && playerCordsMemo.indexOf(valCo) === -1) {
+        computerCordsMemo.push(valCo);
         ring(arrCords[0], arrCords[1]);
     }
 
-
-}
-
-function computerSaveToArr() {
-    getNewCords();
-    computerMoves();
 
 }
 
@@ -173,55 +146,55 @@ function eks(x, y) {
 
 
     if (y <= 171 && x <= 171) {
-        crosCordsMemo.push("I");
+        playerCordsMemo.push("I");
         var X = 170;
         var Y = 10;
         var X2 = 170;
         var Y2 = 10;
     } else if (y <= 171 && x <= 370) {
-        crosCordsMemo.push("IV");
+        playerCordsMemo.push("IV");
         var X = 170;
         var Y = 10;
         var X2 = 190;
         var Y2 = 360;
     } else if (y <= 171 && x <= 530) {
-        crosCordsMemo.push("VII");
+        playerCordsMemo.push("VII");
         var X = 170;
         var Y = 10;
         var X2 = 530;
         var Y2 = 370;
     } else if (y <= 350 && x <= 171) {
-        crosCordsMemo.push("II");
+        playerCordsMemo.push("II");
         var X = 350;
         var Y = 190;
         var X2 = 170;
         var Y2 = 20;
     } else if (y <= 350 && x <= 370) {
-        crosCordsMemo.push("V");
+        playerCordsMemo.push("V");
         var X = 350;
         var Y = 190;
         var X2 = 360;
         var Y2 = 190;
     } else if (y <= 350 && x <= 530) {
-        crosCordsMemo.push("VIII");
+        playerCordsMemo.push("VIII");
         var X = 350;
         var Y = 190;
         var X2 = 530;
         var Y2 = 370;
     } else if (y <= 530 && x <= 171) {
-        crosCordsMemo.push("III");
+        playerCordsMemo.push("III");
         var X = 530;
         var Y = 370;
         var X2 = 170;
         var Y2 = 20;
     } else if (y <= 530 && x <= 370) {
-        crosCordsMemo.push("VI");
+        playerCordsMemo.push("VI");
         var X = 530;
         var Y = 370;
         var X2 = 360;
         var Y2 = 190;
     } else if (y <= 530 && x <= 530) {
-        crosCordsMemo.push("IX");
+        playerCordsMemo.push("IX");
         var X = 530;
         var Y = 370;
         var X2 = 530;
@@ -245,7 +218,7 @@ function ring(x, y) {
 
 
     if (y <= 171 && x <= 171) {
-
+        //I
         var corX = 90;
         var corY = 90;
     } else if (y <= 171 && x <= 370) {
@@ -285,7 +258,6 @@ function ring(x, y) {
         var corY = 450;
     } else if (y <= 530 && x <= 530) {
         //IX pozycja
-
         var corX = 450;
         var corY = 450;
     }
@@ -325,19 +297,22 @@ function playerClick() {
 
             eks(mousePos.x, mousePos.y)
 
-            console.log(crosCordsMemo);
+            console.log(playerCordsMemo);
             //changes cliked so player can have only one move!
             cliked = true;
 
         } else if (!cliked) {
             ring(mousePos.x, mousePos.y);
+            console.log(playerCordsMemo);
+            //changes cliked so player can have only one move!
+            cliked = true;
         }
         console.log(message);
         if (computerClick === false) {
             // prevents from blocking player move on the last spot may be need to change for the first player when comp starts than player has 4 moves....
-            if (circleCordsMemo.length < 4) {
+            if (computerCordsMemo.length < 4) {
                 // makes sure computer always draws an circle loops unitl it find the empty spot;
-                while (crosCordsMemo.length > circleCordsMemo.length) {
+                while (playerCordsMemo.length > computerCordsMemo.length) {
                     computerMoves();
                 }
             }
@@ -388,6 +363,6 @@ function game() {
     lines();
     playerClick();
     deblock();
-    victoryOptions(crosCordsMemo);
-    victoryOptions(circleCordsMemo);
+    victoryOptions(playerCordsMemo);
+    victoryOptions(computerCordsMemo);
 }
