@@ -1,7 +1,4 @@
 // notes to my self
-// need to set up win function when and who wins the game?
-// - need to figure out how to look for patterns of win. 
-//- need to by comparing arrays agein or any other posibitly;
 // need to write logic for computer moves
 //
 
@@ -23,14 +20,14 @@ var computer = "circle";
 var cliked = false;
 var computerClick = false;
 
-//saves all player and computer movments in memry;
+//saves all player and computer movments in memory;
 var playerCordsMemo = [];
 var computerCordsMemo = [];
 
 var x;
 var y;
 
-//set up cords for drawing ciompue cords
+//set up cords for drawing comp cords
 var arrCords = [];
 
 var valCo = "X";
@@ -77,6 +74,7 @@ function victoryOptions(arr) {
 function clearAll() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     valCo = "X";
+    valPl = "X";
     cliked = false;
     computerClick = false;
     x;
@@ -118,157 +116,18 @@ function computerMoves() {
     }
 
     while (computerCordsMemo.indexOf(valCo) === -1 && playerCordsMemo.indexOf(valCo) === -1) {
-        computerCordsMemo.push(valCo);
-        ring(arrCords[0], arrCords[1]);
+
+        if (player === "cros") {
+            computerCordsMemo.push(valCo);
+            ring(arrCords[0], arrCords[1]);
+        } else {
+            computerCordsMemo.push(valCo);
+            eks(arrCords[0], arrCords[1]);
+        }
     }
 
-
 }
 
-
-function lines() {
-    //lines Y
-    ctx.fillStyle = 'green'
-    ctx.fillRect(174, 0, 4, 540);
-    ctx.fillStyle = 'green'
-    ctx.fillRect(364, 0, 4, 540);
-
-    //linesX
-    ctx.fillStyle = 'green'
-    ctx.fillRect(0, 174, 540, 4);
-
-    ctx.fillStyle = 'green'
-    ctx.fillRect(0, 364, 540, 4);
-}
-
-function eks(x, y) {
-
-
-
-    if (y <= 171 && x <= 171) {
-        playerCordsMemo.push("I");
-        var X = 170;
-        var Y = 10;
-        var X2 = 170;
-        var Y2 = 10;
-    } else if (y <= 171 && x <= 370) {
-        playerCordsMemo.push("IV");
-        var X = 170;
-        var Y = 10;
-        var X2 = 190;
-        var Y2 = 360;
-    } else if (y <= 171 && x <= 530) {
-        playerCordsMemo.push("VII");
-        var X = 170;
-        var Y = 10;
-        var X2 = 530;
-        var Y2 = 370;
-    } else if (y <= 350 && x <= 171) {
-        playerCordsMemo.push("II");
-        var X = 350;
-        var Y = 190;
-        var X2 = 170;
-        var Y2 = 20;
-    } else if (y <= 350 && x <= 370) {
-        playerCordsMemo.push("V");
-        var X = 350;
-        var Y = 190;
-        var X2 = 360;
-        var Y2 = 190;
-    } else if (y <= 350 && x <= 530) {
-        playerCordsMemo.push("VIII");
-        var X = 350;
-        var Y = 190;
-        var X2 = 530;
-        var Y2 = 370;
-    } else if (y <= 530 && x <= 171) {
-        playerCordsMemo.push("III");
-        var X = 530;
-        var Y = 370;
-        var X2 = 170;
-        var Y2 = 20;
-    } else if (y <= 530 && x <= 370) {
-        playerCordsMemo.push("VI");
-        var X = 530;
-        var Y = 370;
-        var X2 = 360;
-        var Y2 = 190;
-    } else if (y <= 530 && x <= 530) {
-        playerCordsMemo.push("IX");
-        var X = 530;
-        var Y = 370;
-        var X2 = 530;
-        var Y2 = 370;
-    } else {
-        return false;
-    }
-
-
-
-    ctx.moveTo(X2, Y);
-    ctx.lineTo(Y2, X);
-
-    ctx.moveTo(Y2, Y);
-    ctx.lineTo(X2, X);
-    ctx.stroke();
-
-}
-
-function ring(x, y) {
-
-
-    if (y <= 171 && x <= 171) {
-        //I
-        var corX = 90;
-        var corY = 90;
-    } else if (y <= 171 && x <= 370) {
-        //IV pozycja
-
-        var corX = 270;
-        var corY = 90;
-    } else if (y <= 171 && x <= 530) {
-        //VII pozycja
-
-        var corX = 450;
-        var corY = 90;
-    } else if (y <= 350 && x <= 171) {
-        // II pozycja
-
-        var corX = 90;
-        var corY = 270;
-    } else if (y <= 350 && x <= 370) {
-        //V pozycja
-
-        var corX = 270;
-        var corY = 270;
-    } else if (y <= 350 && x <= 530) {
-        //VIII pozycja
-
-        var corX = 450;
-        var corY = 270;
-    } else if (y <= 530 && x <= 171) {
-        // III pozycja
-
-        var corX = 90;
-        var corY = 450;
-    } else if (y <= 530 && x <= 370) {
-        //VI pozycja
-
-        var corX = 270;
-        var corY = 450;
-    } else if (y <= 530 && x <= 530) {
-        //IX pozycja
-        var corX = 450;
-        var corY = 450;
-    }
-
-
-    ctx.beginPath();
-    //ctx.arc(90/X, 90/Ycoordinate, 70/radius, 0, 2 * Math.PI);
-    ctx.arc(corX, corY, 70, 0, 2 * Math.PI);
-    ctx.stroke();
-    ctx.strokeStyle = "black";
-}
 
 //gets mouse position
 function getMousePos(canvas, evt) {
@@ -288,13 +147,11 @@ function deblock() {
 function playerClick() {
     canvas.addEventListener('click', function (evt) {
         var mousePos = getMousePos(canvas, evt);
+        //dell it
         var message = 'Mouse position: ' + mousePos.x + ' :X' + ',' + mousePos.y + ' :Y';
 
-        playerCheckSpot(x, y)
-
-
         if (player === "cros" && !cliked) {
-
+            playerCheckSpot(mousePos.x, mousePos.y);
             eks(mousePos.x, mousePos.y)
 
             console.log(playerCordsMemo);
@@ -302,11 +159,13 @@ function playerClick() {
             cliked = true;
 
         } else if (!cliked) {
+            playerCheckSpot(mousePos.x, mousePos.y);
             ring(mousePos.x, mousePos.y);
             console.log(playerCordsMemo);
             //changes cliked so player can have only one move!
             cliked = true;
         }
+        //dell it
         console.log(message);
         if (computerClick === false) {
             // prevents from blocking player move on the last spot may be need to change for the first player when comp starts than player has 4 moves....
@@ -329,34 +188,183 @@ function playerCheckSpot(x, y) {
 
     if (y <= 171 && x <= 171) {
         valPl = "I";
-        console.log(valPl);
+        playerCordsMemo.push(valPl);
 
     } else if (y <= 171 && x <= 370) {
         valPl = "IV";
+        playerCordsMemo.push(valPl);
 
     } else if (y <= 171 && x <= 530) {
-        valPl = "VI";
+        valPl = "VII";
+        playerCordsMemo.push(valPl);
 
     } else if (y <= 350 && x <= 171) {
         valPl = "II";
+        playerCordsMemo.push(valPl);
 
     } else if (y <= 350 && x <= 370) {
         valPl = "V";
+        playerCordsMemo.push(valPl);
 
     } else if (y <= 350 && x <= 530) {
-        valPl = "VI";
+        valPl = "VIII";
+        playerCordsMemo.push(valPl);
 
     } else if (y <= 530 && x <= 171) {
-        valPl = "II";
+        valPl = "III";
+        playerCordsMemo.push(valPl);
 
     } else if (y <= 530 && x <= 370) {
         valPl = "VI";
+        playerCordsMemo.push(valPl);
 
     } else if (y <= 530 && x <= 530) {
         valPl = "IX";
+        playerCordsMemo.push(valPl);
 
     }
+    if ((computerCordsMemo.indexOf(valPl) !== -1 && playerCordsMemo.indexOf(valPl) !== -1)) {
+        alert("taken!!!");
+        //need to add restart from this spot!
+    }
+    console.log("valPl: " + valPl);
+    console.log("valCo: " + valCo);
 }
+
+
+//draws board lines
+function lines() {
+    //lines Y
+    ctx.fillStyle = 'green'
+    ctx.fillRect(174, 0, 4, 540);
+    ctx.fillStyle = 'green'
+    ctx.fillRect(364, 0, 4, 540);
+
+    //linesX
+    ctx.fillStyle = 'green'
+    ctx.fillRect(0, 174, 540, 4);
+
+    ctx.fillStyle = 'green'
+    ctx.fillRect(0, 364, 540, 4);
+}
+//draws x
+function eks(x, y) {
+
+    if (y <= 171 && x <= 171) {
+        //I
+        var X = 170;
+        var Y = 10;
+        var X2 = 170;
+        var Y2 = 10;
+    } else if (y <= 171 && x <= 370) {
+        //IV
+        var X = 170;
+        var Y = 10;
+        var X2 = 190;
+        var Y2 = 360;
+    } else if (y <= 171 && x <= 530) {
+        //VII");
+        var X = 170;
+        var Y = 10;
+        var X2 = 530;
+        var Y2 = 370;
+    } else if (y <= 350 && x <= 171) {
+        //II");
+        var X = 350;
+        var Y = 190;
+        var X2 = 170;
+        var Y2 = 20;
+    } else if (y <= 350 && x <= 370) {
+        //V");
+        var X = 350;
+        var Y = 190;
+        var X2 = 360;
+        var Y2 = 190;
+    } else if (y <= 350 && x <= 530) {
+        //VIII");
+        var X = 350;
+        var Y = 190;
+        var X2 = 530;
+        var Y2 = 370;
+    } else if (y <= 530 && x <= 171) {
+        //"III");
+        var X = 530;
+        var Y = 370;
+        var X2 = 170;
+        var Y2 = 20;
+    } else if (y <= 530 && x <= 370) {
+        //"VI");
+        var X = 530;
+        var Y = 370;
+        var X2 = 360;
+        var Y2 = 190;
+    } else if (y <= 530 && x <= 530) {
+        //"IX");
+        var X = 530;
+        var Y = 370;
+        var X2 = 530;
+        var Y2 = 370;
+    } else {
+        return false;
+    }
+    //draws X
+    ctx.moveTo(X2, Y);
+    ctx.lineTo(Y2, X);
+
+    ctx.moveTo(Y2, Y);
+    ctx.lineTo(X2, X);
+    ctx.stroke();
+
+}
+
+function ring(x, y) {
+
+    if (y <= 171 && x <= 171) {
+        //I
+        var corX = 90;
+        var corY = 90;
+    } else if (y <= 171 && x <= 370) {
+        //IV pozycja
+        var corX = 270;
+        var corY = 90;
+    } else if (y <= 171 && x <= 530) {
+        //VII pozycja
+        var corX = 450;
+        var corY = 90;
+    } else if (y <= 350 && x <= 171) {
+        // II pozycja
+        var corX = 90;
+        var corY = 270;
+    } else if (y <= 350 && x <= 370) {
+        //V pozycja
+        var corX = 270;
+        var corY = 270;
+    } else if (y <= 350 && x <= 530) {
+        //VIII pozycja
+        var corX = 450;
+        var corY = 270;
+    } else if (y <= 530 && x <= 171) {
+        // III pozycja
+        var corX = 90;
+        var corY = 450;
+    } else if (y <= 530 && x <= 370) {
+        //VI pozycja
+        var corX = 270;
+        var corY = 450;
+    } else if (y <= 530 && x <= 530) {
+        //IX pozycja
+        var corX = 450;
+        var corY = 450;
+    }
+
+    //draws circle
+    ctx.beginPath();
+    //ctx.arc(90/X, 90/Ycoordinate, 70/radius, 0, 2 * Math.PI);
+    ctx.arc(corX, corY, 70, 0, 2 * Math.PI);
+    ctx.stroke();
+    ctx.strokeStyle = "black";
+}
+
 
 //draws a game
 function game() {
