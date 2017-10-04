@@ -32,6 +32,8 @@ var arrCords = [];
 
 var valCo = "X";
 var valPl = "X";
+//for check if sopt is empty
+var taken = false;
 
 //sets game timmig; 
 
@@ -126,6 +128,124 @@ function computerMoves() {
         }
     }
 
+}
+
+
+//gets mouse position
+function getMousePos(canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+        x: Math.round((evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width),
+        y: Math.round((evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height)
+    };
+}
+//function for clearing cliked vars so palyer can move again;
+function deblock() {
+    cliked = false;
+    computerClick = false;
+}
+
+//mousemove to get cors while moving mouse; get pos on click
+function playerClick() {
+    canvas.addEventListener('click', function (evt) {
+        var mousePos = getMousePos(canvas, evt);
+
+        taken = false;
+
+        //need to work some more on this mechanism
+        isItTaken(mousePos.x, mousePos.y);
+        if (player === "cros" && !cliked && taken === false) {
+            playerCheckSpot(mousePos.x, mousePos.y);
+
+            eks(mousePos.x, mousePos.y)
+
+            //changes cliked so player can have only one move!
+            cliked = true;
+
+            taken = false;
+
+
+
+        } else if (!cliked && taken === false) {
+            playerCheckSpot(mousePos.x, mousePos.y);
+            ring(mousePos.x, mousePos.y);
+            console.log(playerCordsMemo);
+            //changes cliked so player can have only one move!
+            cliked = true;
+            taken = false;
+        }
+
+
+
+
+        if (computerClick === false) {
+            // prevents from blocking player move on the last spot may be need to change for the first player when comp starts than player has 4 moves....
+            if (computerCordsMemo.length < 4) {
+                // makes sure computer always draws an circle loops unitl it find the empty spot;
+                while (playerCordsMemo.length > computerCordsMemo.length) {
+                    computerMoves();
+                }
+            }
+            computerClick = true;
+        }
+
+    }, false);
+
+
+}
+
+function isItTaken(x, y) {
+    if ((computerCordsMemo.indexOf(valPl) !== -1 && playerCordsMemo.indexOf(valPl) !== -1) && taken === false) {
+        alert("taken!!!");
+        taken = true;
+        valPl = "X";
+
+        //need to add restart from this spot!
+    }
+}
+//cheks if player spots is empty
+function playerCheckSpot(x, y) {
+
+    if (y <= 171 && x <= 171) {
+        valPl = "I";
+        playerCordsMemo.push(valPl);
+
+    } else if (y <= 171 && x <= 370) {
+        valPl = "IV";
+        playerCordsMemo.push(valPl);
+
+    } else if (y <= 171 && x <= 530) {
+        valPl = "VII";
+        playerCordsMemo.push(valPl);
+
+    } else if (y <= 350 && x <= 171) {
+        valPl = "II";
+        playerCordsMemo.push(valPl);
+
+    } else if (y <= 350 && x <= 370) {
+        valPl = "V";
+        playerCordsMemo.push(valPl);
+
+    } else if (y <= 350 && x <= 530) {
+        valPl = "VIII";
+        playerCordsMemo.push(valPl);
+
+    } else if (y <= 530 && x <= 171) {
+        valPl = "III";
+        playerCordsMemo.push(valPl);
+
+    } else if (y <= 530 && x <= 370) {
+        valPl = "VI";
+        playerCordsMemo.push(valPl);
+
+    } else if (y <= 530 && x <= 530) {
+        valPl = "IX";
+        playerCordsMemo.push(valPl);
+
+    }
+
+    console.log("valPl: " + valPl);
+    console.log("valCo: " + valCo);
 }
 
 
@@ -260,105 +380,6 @@ function ring(x, y) {
     ctx.arc(corX, corY, 70, 0, 2 * Math.PI);
     ctx.stroke();
     ctx.strokeStyle = "black";
-}
-
-//gets mouse position
-function getMousePos(canvas, evt) {
-    var rect = canvas.getBoundingClientRect();
-    return {
-        x: Math.round((evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width),
-        y: Math.round((evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height)
-    };
-}
-//function for clearing cliked vars so palyer can move again;
-function deblock() {
-    cliked = false;
-    computerClick = false;
-}
-
-//mousemove to get cors while moving mouse; get pos on click
-function playerClick() {
-    canvas.addEventListener('click', function (evt) {
-        var mousePos = getMousePos(canvas, evt);
-        //dell it
-        var message = 'Mouse position: ' + mousePos.x + ' :X' + ',' + mousePos.y + ' :Y';
-
-        if (player === "cros" && !cliked) {
-            playerCheckSpot(mousePos.x, mousePos.y);
-            eks(mousePos.x, mousePos.y)
-
-            console.log(playerCordsMemo);
-            //changes cliked so player can have only one move!
-            cliked = true;
-
-        } else if (!cliked) {
-            playerCheckSpot(mousePos.x, mousePos.y);
-            ring(mousePos.x, mousePos.y);
-            console.log(playerCordsMemo);
-            //changes cliked so player can have only one move!
-            cliked = true;
-        }
-        //dell it
-        console.log(message);
-        if (computerClick === false) {
-            // prevents from blocking player move on the last spot may be need to change for the first player when comp starts than player has 4 moves....
-            if (computerCordsMemo.length < 4) {
-                // makes sure computer always draws an circle loops unitl it find the empty spot;
-                while (playerCordsMemo.length > computerCordsMemo.length) {
-                    computerMoves();
-                }
-            }
-            computerClick = true;
-        }
-
-    }, false);
-
-
-}
-
-//cheks if player spots is empty
-function playerCheckSpot(x, y) {
-
-    if (y <= 171 && x <= 171) {
-        valPl = "I";
-        playerCordsMemo.push(valPl);
-
-    } else if (y <= 171 && x <= 370) {
-        valPl = "IV";
-        playerCordsMemo.push(valPl);
-
-    } else if (y <= 171 && x <= 530) {
-        valPl = "VII";
-        playerCordsMemo.push(valPl);
-
-    } else if (y <= 350 && x <= 171) {
-        valPl = "II";
-        playerCordsMemo.push(valPl);
-
-    } else if (y <= 350 && x <= 370) {
-        valPl = "V";
-        playerCordsMemo.push(valPl);
-
-    } else if (y <= 350 && x <= 530) {
-        valPl = "VIII";
-        playerCordsMemo.push(valPl);
-
-    } else if (y <= 530 && x <= 171) {
-        valPl = "III";
-        playerCordsMemo.push(valPl);
-
-    } else if (y <= 530 && x <= 370) {
-        valPl = "VI";
-        playerCordsMemo.push(valPl);
-
-    } else if (y <= 530 && x <= 530) {
-        valPl = "IX";
-        playerCordsMemo.push(valPl);
-
-    }
-
-    console.log("valPl: " + valPl);
-    console.log("valCo: " + valCo);
 }
 
 
