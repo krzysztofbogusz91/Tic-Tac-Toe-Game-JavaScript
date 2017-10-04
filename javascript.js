@@ -32,6 +32,8 @@ var arrCords = [];
 
 var valCo = "X";
 var valPl = "X";
+//for check if sopt is empty
+var taken = false;
 
 //sets game timmig; 
 
@@ -147,26 +149,35 @@ function deblock() {
 function playerClick() {
     canvas.addEventListener('click', function (evt) {
         var mousePos = getMousePos(canvas, evt);
-        //dell it
-        var message = 'Mouse position: ' + mousePos.x + ' :X' + ',' + mousePos.y + ' :Y';
 
-        if (player === "cros" && !cliked) {
+        taken = false;
+
+        //need to work some more on this mechanism
+        isItTaken(mousePos.x, mousePos.y);
+        if (player === "cros" && !cliked && taken === false) {
             playerCheckSpot(mousePos.x, mousePos.y);
+
             eks(mousePos.x, mousePos.y)
 
-            console.log(playerCordsMemo);
             //changes cliked so player can have only one move!
             cliked = true;
 
-        } else if (!cliked) {
+            taken = false;
+
+
+
+        } else if (!cliked && taken === false) {
             playerCheckSpot(mousePos.x, mousePos.y);
             ring(mousePos.x, mousePos.y);
             console.log(playerCordsMemo);
             //changes cliked so player can have only one move!
             cliked = true;
+            taken = false;
         }
-        //dell it
-        console.log(message);
+
+
+
+
         if (computerClick === false) {
             // prevents from blocking player move on the last spot may be need to change for the first player when comp starts than player has 4 moves....
             if (computerCordsMemo.length < 4) {
@@ -183,6 +194,15 @@ function playerClick() {
 
 }
 
+function isItTaken(x, y) {
+    if ((computerCordsMemo.indexOf(valPl) !== -1 && playerCordsMemo.indexOf(valPl) !== -1) && taken === false) {
+        alert("taken!!!");
+        taken = true;
+        valPl = "X";
+
+        //need to add restart from this spot!
+    }
+}
 //cheks if player spots is empty
 function playerCheckSpot(x, y) {
 
@@ -223,10 +243,7 @@ function playerCheckSpot(x, y) {
         playerCordsMemo.push(valPl);
 
     }
-    if ((computerCordsMemo.indexOf(valPl) !== -1 && playerCordsMemo.indexOf(valPl) !== -1)) {
-        alert("taken!!!");
-        //need to add restart from this spot!
-    }
+
     console.log("valPl: " + valPl);
     console.log("valCo: " + valCo);
 }
