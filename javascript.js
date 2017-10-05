@@ -69,6 +69,11 @@ function victoryOptions(arr) {
 
     }
 
+    /*SWITCH STATMENT
+    
+    switch(a)
+    
+    */
 }
 
 //function for clearing up the board!
@@ -85,9 +90,23 @@ function clearAll() {
 }
 
 function getNewCords() {
+
+
     x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
     y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
+    ///give it couple difrent trys save in arr, check player memo cords and firtly block a player, also try to get as close to maching positon as posible;
+    //also check computer cods memo for maching positions and chose the closet to making it a winning position;
+
+    if (playerCordsMemo.length <= 1 && computerCordsMemo.length <= 1) {
+        x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
+        y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
+
+
+    }
+
+
     return arrCords = [x, y];
+
 }
 
 //start writing the logic;
