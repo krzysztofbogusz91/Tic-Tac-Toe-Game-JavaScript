@@ -37,7 +37,7 @@ var y;
 var arrCords = [];
 var arrCordsPropose = [];
 
-var valCo = "X";
+var valCo = getNewCords();
 var valPl = "X";
 //for check if sopt is empty
 var taken = false;
@@ -47,128 +47,50 @@ var arrOfWins = [["I", "II", "III"], ["IV", "V", "VI"], ["VII", "VIII", "IX"], [
 
 var aI = [];
 
-function positionsToCords(val) {
-    //somethin is wrong not all are geting drawn
-    //change it for switch statment
-    if (val === "I") {
-        x = 150;
-        y = 150;
-    } else if (val === "II") {
-        y = 320;
-        x = 50;
-    } else if (val === "III") {
-        y = 500;
-        x = 150;
-    } else if (val === "IV") {
-        y = 150;
-        x = 350;
-    } else if (val === "V") {
-        y = 350;
-        x = 350;
-    } else if (val === "VI") {
-        y = 500;
-        x = 350;
-    } else if (val = "VII") {
-        y = 150;
-        x = 500;
-    } else if (val === "VIII") {
-        y = 350;
-        x = 500;
-    } else if (val === "IX") {
-        y = 500;
-        x = 500;
+
+
+//starts computer move
+function computerMovesOne() {
+
+    if (computerClick === false) {
+        // prevents from blocking player move on the last spot may be need to change for the first player when comp starts than player has 4 moves....
+        if (computerCordsMemo.length < 4) {
+            // makes sure computer always draws an circle loops unitl it find the empty spot;
+            while (playerCordsMemo.length > computerCordsMemo.length) {
+                computerDraws();
+            }
+        }
+        computerClick = true;
     }
-    console.log(x, y)
-    return arrCords = [x, y];
-}
-
-
-//will look trough arrays for pattern maching if any of winng options will exisit it will pass mesege;
-function victoryOptions(arr) {
-
-    var winner = "";
-    if (arr.length > 5) {
-        winner = "REMIS";
-        alert(winner);
-        clearAll();
-    } else if (arr === playerCordsMemo) {
-        winner = "Player";
-    } else {
-        winner = "Computer";
-    }
-
-    if (arr.indexOf("I") >= 0 && arr.indexOf("II") >= 0 && arr.indexOf("III") >= 0 ||
-        arr.indexOf("IV") >= 0 && arr.indexOf("V") >= 0 && arr.indexOf("VI") >= 0 ||
-        arr.indexOf("VII") >= 0 && arr.indexOf("VIII") >= 0 && arr.indexOf("IX") >= 0 ||
-        arr.indexOf("I") >= 0 && arr.indexOf("IV") >= 0 && arr.indexOf("VII") >= 0 ||
-        arr.indexOf("II") >= 0 && arr.indexOf("V") >= 0 && arr.indexOf("VIII") >= 0 ||
-        arr.indexOf("III") >= 0 && arr.indexOf("VI") >= 0 && arr.indexOf("IX") >= 0 ||
-        arr.indexOf("I") >= 0 && arr.indexOf("V") >= 0 && arr.indexOf("IX") >= 0 ||
-        arr.indexOf("VII") >= 0 && arr.indexOf("V") >= 0 && arr.indexOf("III") >= 0) {
-        alert(winner + " " + "wins the game!");
-        playerCordsMemo = [];
-        computerCordsMemo = [];
-        clearAll();
-
-    }
-
-    /*SWITCH STATMENT
-    
-    switch(a)
-    
-    */
-}
-
-//function for clearing up the board!
-
-function clearAll() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    valCo = "X";
-    valPl = "X";
-    cliked = false;
-    computerClick = false;
-    x;
-    y;
-    window.location.reload(true);
-}
-
-function getNewCords() {
-
-    /*for (var i = 0; i < 25; i++) {
-        x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-        y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-
-        aI[i].push(x);
-        aI[i].push(y);
-
-    }*/
-    ///give it couple difrent trys save in arr, check player memo cords and firtly block a player, also try to get as close to maching positon as posible;
-    //also check computer cods memo for maching positions and chose the closet to making it a winning position;
-
-    if (playerCordsMemo.length <= 1 && computerCordsMemo.length <= 1) {
-        x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-        y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-
-
-    } else {
-
-        x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-        y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-
-    }
-
-
-
-    return arrCords = [x, y];
 
 }
 
 //works on computer movment;
-function computerMoves() {
-    // get random cords 
+function computerDraws() {
+
+    //if else is this random first move or computer starts thinking
+    //put it into a separate function so you have clean statemt 
     getNewCords();
-    x = arrCords[0];
-    y = arrCords[1];
+    while (isItTakenComputer(valCo) === false) {
+        console.log("I got new cords :)");
+        getNewCords();
+    }
+    computerCordsMemo.push(valCo);
+
+
+
+    if (player === "cros") {
+        ring(arrCords[0], arrCords[1]);
+    } else {
+        eks(arrCords[0], arrCords[1]);
+    }
+}
+
+// get random cords 
+function getNewCords() {
+
+    x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
+    y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
 
     if (y <= 171 && x <= 171) {
         valCo = "I";
@@ -190,25 +112,88 @@ function computerMoves() {
         valCo = "IX";
     }
 
-    //flatend cords and manipulate it so it eiter bloks a player or drives to winnpositions as close as posible to the orginal cords. 
 
+    return arrCords = [x, y];
 
-    //check if spot is empty, so computer is not playing empty spots
-    while (computerCordsMemo.indexOf(valCo) === -1 && playerCordsMemo.indexOf(valCo) === -1) {
-        //positionsToCords(valCo);
-        if (player === "cros") {
-            computerCordsMemo.push(valCo);
-            ring(arrCords[0], arrCords[1]);
-        } else {
-            computerCordsMemo.push(valCo);
-            eks(arrCords[0], arrCords[1]);
-        }
+}
+
+function compLogic() {
+
+    //push posible options here and than chose one at random
+    var computerChoicesArr = [];
+
+    if (computerCordsMemo.length === 0 && playerCordsMemo.length === 0) {
+        getNewCords();
+    } else if (computerCordsMemo.length !== 0 && playerCordsMemo.length !== 0) {
+        //set new valCo and pass cords to the draw function
+        // go trough player cords memo if close to any of small winn arr blok him
+        //loook for empty spot isitTakenComputer if yes change vaCo
+        //else
+        // go trough computer cords memo make val closest to make computer win. 
+        //else go to random spoot if any of this choices not good. 
+
+        /* --- bad code think it through ---
+        computerCordsMemo.forEach(function (a) {
+            if (computerCordsMemo.indexOf(a) === -1) {
+                computerChoicesArr.push(a);
+            }
+        });
+        
+        playerCordsMemo.forEach(function (a) {
+            if (computerCordsMemo.indexOf(a) === -1 && playerCordsMemo.indexOf(a)) {
+                computerChoicesArr.push(a);
+            }
+     
+     });
+     
+     */
     }
 
 
 
+
+    if (valCo === "I") {
+        x = 150;
+        y = 150;
+    } else if (valCo === "II") {
+        y = 320;
+        x = 50;
+    } else if (valCo === "III") {
+        y = 500;
+        x = 150;
+    } else if (valCo === "IV") {
+        y = 150;
+        x = 350;
+    } else if (valCo === "V") {
+        y = 350;
+        x = 350;
+    } else if (valCo === "VI") {
+        y = 500;
+        x = 350;
+    } else if (valCo = "VII") {
+        y = 150;
+        x = 500;
+    } else if (valCo === "VIII") {
+        y = 340;
+        x = 500;
+    } else if (valCo === "IX") {
+        y = 500;
+        x = 500;
+    }
+
+
+    console.log("ComputerLogic x,y" + x, y);
+    return arrCords = [x, y];
 }
 
+function isItTakenComputer(val) {
+    //add if computer first moves arr<5 if second <4
+    if (computerCordsMemo.indexOf(val) === -1 && playerCordsMemo.indexOf(val) === -1) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 //gets mouse position
 function getMousePos(canvas, evt) {
@@ -218,14 +203,12 @@ function getMousePos(canvas, evt) {
         y: Math.round((evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height)
     };
 }
-//function for clearing cliked vars so palyer can move again;
-function deblock() {
-    cliked = false;
-    computerClick = false;
-}
 
 //mousemove to get cors while moving mouse; get pos on click
 function playerClick() {
+
+    console.log("valCo: " + valCo);
+
     canvas.addEventListener('click', function (evt) {
         var mousePos = getMousePos(canvas, evt);
 
@@ -243,8 +226,6 @@ function playerClick() {
 
             taken = false;
 
-
-
         } else if (!cliked && taken === false) {
             playerCheckSpot(mousePos.x, mousePos.y);
             ring(mousePos.x, mousePos.y);
@@ -254,35 +235,11 @@ function playerClick() {
             taken = false;
         }
 
-
-
-
-        if (computerClick === false) {
-            // prevents from blocking player move on the last spot may be need to change for the first player when comp starts than player has 4 moves....
-            if (computerCordsMemo.length < 4) {
-                // makes sure computer always draws an circle loops unitl it find the empty spot;
-                while (playerCordsMemo.length > computerCordsMemo.length) {
-                    computerMoves();
-                }
-            }
-            computerClick = true;
-        }
-
     }, false);
 
-
 }
 
-function isItTaken(x, y) {
-    if ((computerCordsMemo.indexOf(valPl) !== -1 && playerCordsMemo.indexOf(valPl) !== -1) && taken === false) {
-        alert("taken!!!");
-        taken = true;
-        valPl = "X";
 
-        //need to add restart player move from this spot! how?
-    }
-}
-//cheks if player spots is empty
 function playerCheckSpot(x, y) {
 
     if (y <= 171 && x <= 171) {
@@ -325,6 +282,66 @@ function playerCheckSpot(x, y) {
 
     console.log("valPl: " + valPl);
     console.log("valCo: " + valCo);
+}
+
+//cheks if player spots is empty
+function isItTaken(x, y) {
+    if ((computerCordsMemo.indexOf(valPl) !== -1 && playerCordsMemo.indexOf(valPl) !== -1) && taken === false) {
+        alert("taken!!!");
+        taken = true;
+        valPl = "X";
+
+        //need to add restart player move from this spot! how?
+    }
+}
+
+//will look trough arrays for pattern maching if any of winng options will exisit it will pass mesege;
+function victoryOptions(arr) {
+
+    var winner = "";
+    if (arr.length > 5) {
+        winner = "REMIS";
+        alert(winner);
+        clearAll();
+    } else if (arr === playerCordsMemo) {
+        winner = "Player";
+    } else {
+        winner = "Computer";
+    }
+
+    if (arr.indexOf("I") >= 0 && arr.indexOf("II") >= 0 && arr.indexOf("III") >= 0 ||
+        arr.indexOf("IV") >= 0 && arr.indexOf("V") >= 0 && arr.indexOf("VI") >= 0 ||
+        arr.indexOf("VII") >= 0 && arr.indexOf("VIII") >= 0 && arr.indexOf("IX") >= 0 ||
+        arr.indexOf("I") >= 0 && arr.indexOf("IV") >= 0 && arr.indexOf("VII") >= 0 ||
+        arr.indexOf("II") >= 0 && arr.indexOf("V") >= 0 && arr.indexOf("VIII") >= 0 ||
+        arr.indexOf("III") >= 0 && arr.indexOf("VI") >= 0 && arr.indexOf("IX") >= 0 ||
+        arr.indexOf("I") >= 0 && arr.indexOf("V") >= 0 && arr.indexOf("IX") >= 0 ||
+        arr.indexOf("VII") >= 0 && arr.indexOf("V") >= 0 && arr.indexOf("III") >= 0) {
+        alert(winner + " " + "wins the game!");
+        playerCordsMemo = [];
+        computerCordsMemo = [];
+        clearAll();
+
+    }
+
+}
+
+//function for clearing up the board!
+function clearAll() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    valCo = "X";
+    valPl = "X";
+    cliked = false;
+    computerClick = false;
+    x;
+    y;
+    window.location.reload(true);
+}
+
+//function for clearing cliked vars so palyer can move again;
+function deblock() {
+    cliked = false;
+    computerClick = false;
 }
 
 
@@ -466,6 +483,7 @@ function ring(x, y) {
 function game() {
     lines();
     playerClick();
+    computerMovesOne();
     deblock();
     victoryOptions(playerCordsMemo);
     victoryOptions(computerCordsMemo);
