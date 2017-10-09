@@ -37,7 +37,7 @@ var y;
 var arrCords = [];
 var arrCordsPropose = [];
 
-var valCo = "X";
+var valCo;
 var valPl = "X";
 //for check if sopt is empty
 var taken = false;
@@ -78,94 +78,24 @@ function computerDraws() {
     }
 }
 
-// get random cords 
-function getNewCords() {
-
-    x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-    y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-
-    if (y <= 171 && x <= 171) {
-        valCo = "I";
-    } else if (y <= 171 && x <= 370) {
-        valCo = "IV";
-    } else if (y <= 171 && x <= 530) {
-        valCo = "VII";
-    } else if (y <= 350 && x <= 171) {
-        valCo = "II";
-    } else if (y <= 350 && x <= 370) {
-        valCo = "V";
-    } else if (y <= 350 && x <= 530) {
-        valCo = "VIII";
-    } else if (y <= 530 && x <= 171) {
-        valCo = "III";
-    } else if (y <= 530 && x <= 370) {
-        valCo = "VI";
-    } else if (y <= 530 && x <= 530) {
-        valCo = "IX";
-    }
-
-    console.log(valCo);
-    return arrCords = [x, y];
-
+//updates empty spots;
+function clearSpots() {
+    arrPosibleMoves = arrPosibleMoves.filter(function (a) {
+        if (isItNotTakenComputer(a)) {
+            return a;
+        }
+    });
 }
 
 function compLogic() {
 
-    //push posible options here and than chose one at random
-
     //IT MUST BE HERE - NOW I GOT THIS KIND`A WORKING!!!
-    getNewCords();
-    //if else is this random first move or computer starts thinking
-
-    var loop = 0;
-    while (isItNotTakenComputer(valCo) === false) {
-        console.log("I got new cords :)");
-        loop++;
-        console.log("I loop: " + loop);
-        getNewCords();
-    }
+    clearSpots();
+    //gets random posible choice and sets sup cords;
+    valCo = arrPosibleMoves[Math.floor(Math.random() * ((arrPosibleMoves.length - 1) - 0 + 1)) + 0];
 
 
-    /*Now i can finaly start working on some real computer logic funcions seems to be set up fine
-
-        if (computerCordsMemo.length === 0 && playerCordsMemo.length === 0) {
-            getNewCords();
-        } else if (computerCordsMemo.length !== 0 && playerCordsMemo.length !== 0) {
-            //set new valCo and pass cords to the draw function
-            // go trough player cords memo if close to any of small winn arr blok him
-            //loook for empty spot isitNotTakenComputer if yes change vaCo
-            //else
-            // go trough computer cords memo make val closest to make computer win. 
-            //else go to random spoot if any of this choices not good. 
-
-            /* --- bad code think it through ---
-            computerCordsMemo.forEach(function (a) {
-                if (computerCordsMemo.indexOf(a) === -1) {
-                    computerChoicesArr.push(a);
-                }
-            });
-            
-            playerCordsMemo.forEach(function (a) {
-                if (computerCordsMemo.indexOf(a) === -1 && playerCordsMemo.indexOf(a)) {
-                    computerChoicesArr.push(a);
-                }
-         
-         });
-         
-         
-            console.log("longer than 0");
-            if (playerCordsMemo.indexOf("I") !== -1 && computerCordsMemo.indexOf("I") !== -1) {
-                valCo = "IV";
-                console.log("Im thinking");
-
-            } else {
-                getNewCords();
-            }
-
-        }
-
-
-   
+    //if player is close to win put valCo there;
 
 
     if (valCo === "I") {
@@ -186,7 +116,7 @@ function compLogic() {
     } else if (valCo === "VI") {
         y = 500;
         x = 350;
-    } else if (valCo = "VII") {
+    } else if (valCo === "VII") {
         y = 150;
         x = 500;
     } else if (valCo === "VIII") {
@@ -196,18 +126,13 @@ function compLogic() {
         y = 500;
         x = 500;
     }
-     */
+
     computerCordsMemo.push(valCo);
 
     //push posible options here and than chose one at random
     // ned to get it somwher up so we can use this to decide where put computer or write logic below think it troug?
-    var emptySpots = arrPosibleMoves.filter(function (a) {
-        if (isItNotTakenComputer(a)) {
-            return a;
-        }
-
-    });
-    console.log(emptySpots);
+    clearSpots();
+    console.log(arrPosibleMoves);
     console.log("ComputerLogic x,y" + x + y + valCo);
     return arrCords = [x, y];
 }
@@ -308,6 +233,8 @@ function playerCheckSpot(x, y) {
 
     console.log("valPl: " + valPl);
     console.log("valCo: " + valCo);
+
+
 }
 
 //cheks if player spots is empty
@@ -514,3 +441,147 @@ function game() {
     victoryOptions(playerCordsMemo);
     victoryOptions(computerCordsMemo);
 }
+
+//OLD CODE! dell it later on
+/*
+
+// get random cords 
+function getNewCords() {
+
+    x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
+    y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
+
+    if (y <= 171 && x <= 171) {
+        valCo = "I";
+    } else if (y <= 171 && x <= 370) {
+        valCo = "IV";
+    } else if (y <= 171 && x <= 530) {
+        valCo = "VII";
+    } else if (y <= 350 && x <= 171) {
+        valCo = "II";
+    } else if (y <= 350 && x <= 370) {
+        valCo = "V";
+    } else if (y <= 350 && x <= 530) {
+        valCo = "VIII";
+    } else if (y <= 530 && x <= 171) {
+        valCo = "III";
+    } else if (y <= 530 && x <= 370) {
+        valCo = "VI";
+    } else if (y <= 530 && x <= 530) {
+        valCo = "IX";
+    }
+
+    console.log(valCo);
+    return arrCords = [x, y];
+
+} 
+//updates empty spots;
+function clearSpots() {
+    arrPosibleMoves = arrPosibleMoves.filter(function (a) {
+        if (isItNotTakenComputer(a)) {
+            return a;
+        }
+    });
+}
+
+function compLogic() {
+
+    //push posible options here and than chose one at random
+
+    //IT MUST BE HERE - NOW I GOT THIS KIND`A WORKING!!!
+    // getNewCords();
+    //if else is this random first move or computer starts thinking
+    /*
+       var loop = 0;
+       while (isItNotTakenComputer(valCo) === false) {
+           console.log("I got new cords :)");
+           loop++;
+           console.log("I loop: " + loop);
+           getNewCords();
+       }      
+          Now i can finaly start working on some real computer logic funcions seems to be set up fine
+
+              if (computerCordsMemo.length === 0 && playerCordsMemo.length === 0) {
+                  getNewCords();
+              } else if (computerCordsMemo.length !== 0 && playerCordsMemo.length !== 0) {
+                  //set new valCo and pass cords to the draw function
+                  // go trough player cords memo if close to any of small winn arr blok him
+                  //loook for empty spot isitNotTakenComputer if yes change vaCo
+                  //else
+                  // go trough computer cords memo make val closest to make computer win. 
+                  //else go to random spoot if any of this choices not good. 
+
+                  /* --- bad code think it through ---
+                  computerCordsMemo.forEach(function (a) {
+                      if (computerCordsMemo.indexOf(a) === -1) {
+                          computerChoicesArr.push(a);
+                      }
+                  });
+                  
+                  playerCordsMemo.forEach(function (a) {
+                      if (computerCordsMemo.indexOf(a) === -1 && playerCordsMemo.indexOf(a)) {
+                          computerChoicesArr.push(a);
+                      }
+               
+               });
+               
+               
+                  console.log("longer than 0");
+                  if (playerCordsMemo.indexOf("I") !== -1 && computerCordsMemo.indexOf("I") !== -1) {
+                      valCo = "IV";
+                      console.log("Im thinking");
+
+                  } else {
+                      getNewCords();
+                  }
+
+              }
+              
+    //push posible options here and than chose one at random
+
+    //IT MUST BE HERE - NOW I GOT THIS KIND`A WORKING!!!
+    clearSpots();
+
+    //gets random posible choice and sets sup cords;
+    valCo = arrPosibleMoves[Math.floor(Math.random() * ((arrPosibleMoves.length - 1) - 0 + 1)) + 0];
+
+
+    if (valCo === "I") {
+        x = 150;
+        y = 150;
+    } else if (valCo === "II") {
+        y = 320;
+        x = 50;
+    } else if (valCo === "III") {
+        y = 500;
+        x = 150;
+    } else if (valCo === "IV") {
+        y = 150;
+        x = 350;
+    } else if (valCo === "V") {
+        y = 350;
+        x = 350;
+    } else if (valCo === "VI") {
+        y = 500;
+        x = 350;
+    } else if (valCo === "VII") {
+        y = 150;
+        x = 500;
+    } else if (valCo === "VIII") {
+        y = 340;
+        x = 500;
+    } else if (valCo === "IX") {
+        y = 500;
+        x = 500;
+    }
+
+    computerCordsMemo.push(valCo);
+
+    //push posible options here and than chose one at random
+    // ned to get it somwher up so we can use this to decide where put computer or write logic below think it troug?
+    clearSpots();
+    console.log(arrPosibleMoves);
+    console.log("ComputerLogic x,y" + x + y + valCo);
+    return arrCords = [x, y];
+}
+*/
