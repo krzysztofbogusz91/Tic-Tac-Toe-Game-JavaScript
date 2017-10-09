@@ -48,9 +48,29 @@ var arrOfWins = [["I", "II", "III"], ["IV", "V", "VI"], ["VII", "VIII", "IX"], [
 var arrPosibleMoves = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"];
 
 
-var aI = [];
+var aI;
 
+// as it said
+function isPlayerCloseToWinn() {
 
+    // playerCordsMemo.indexOf(arrOfWins[i][j] !== -1)
+
+    aI = arrOfWins.filter(function (a, index) {
+        console.log("a: " + a + "index: " + index);
+        a.filter(function (b) {
+            console.log("b: " + b);
+            console.log(playerCordsMemo.indexOf(b) === -1);
+
+            if (playerCordsMemo.indexOf(b) === -1) {
+                ///why not working?
+                return a[b];
+            }
+
+        });
+    });
+    console.log(aI);
+    return aI;
+}
 
 //starts computer move
 function computerMovesOne() {
@@ -96,6 +116,7 @@ function compLogic() {
 
 
     //if player is close to win put valCo there;
+
 
 
     if (valCo === "I") {
