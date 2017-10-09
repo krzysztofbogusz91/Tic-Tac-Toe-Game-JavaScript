@@ -1,6 +1,6 @@
 // notes to my self
 // need to write logic for computer moves
-//
+// //need to add restart player move from this spot! how??
 
 
 var canvas = document.getElementById('myCanvas');
@@ -12,6 +12,12 @@ canvas.height = 540;
 
 const cw = canvas.width;
 const ch = canvas.height;
+
+
+//sets game timmig;
+
+var inter = setInterval(game, 1000 / 60);
+
 
 var player = "cros";
 var computer = "circle";
@@ -29,16 +35,17 @@ var y;
 
 //set up cords for drawing comp cords
 var arrCords = [];
+var arrCordsPropose = [];
 
-var valCo = "X";
+var valCo;
 var valPl = "X";
 //for check if sopt is empty
 var taken = false;
 
-//sets game timmig; 
+//array of winns positions for checkin and for Ai
+var arrOfWins = [["I", "II", "III"], ["IV", "V", "VI"], ["VII", "VIII", "IX"], ["I", "IV", "VII"], ["II", "V", "VIII"], ["III", "VI", "IX"], ["I", "V", "IX"], ["VII", "V", "III"]];
 
-var inter = setInterval(game, 1000 / 60);
-
+var aI = [];
 
 //will look trough arrays for pattern maching if any of winng options will exisit it will pass mesege;
 function victoryOptions(arr) {
@@ -59,7 +66,7 @@ function victoryOptions(arr) {
         arr.indexOf("VII") >= 0 && arr.indexOf("VIII") >= 0 && arr.indexOf("IX") >= 0 ||
         arr.indexOf("I") >= 0 && arr.indexOf("IV") >= 0 && arr.indexOf("VII") >= 0 ||
         arr.indexOf("II") >= 0 && arr.indexOf("V") >= 0 && arr.indexOf("VIII") >= 0 ||
-        arr.indexOf("III") >= 0 && arr.indexOf("VI") >= 0 && arr.indexOf("IV") >= 0 ||
+        arr.indexOf("III") >= 0 && arr.indexOf("VI") >= 0 && arr.indexOf("IX") >= 0 ||
         arr.indexOf("I") >= 0 && arr.indexOf("V") >= 0 && arr.indexOf("IX") >= 0 ||
         arr.indexOf("VII") >= 0 && arr.indexOf("V") >= 0 && arr.indexOf("III") >= 0) {
         alert(winner + " " + "wins the game!");
@@ -84,18 +91,65 @@ function clearAll() {
     window.location.reload(true);
 }
 
-function getNewCords() {
-    x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-    y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-    return arrCords = [x, y];
+//flatend cords and manipulate it so it eiter bloks a player or drives to winnpositions as close as posible to the orginal cords. 
+//check if spot is empty, so computer is not playing empty spots
+function positionsToCords() {
+    //somethin is wrong not all are geting drawn
+    //change it for switch statment
+
+    //is this corect??
+    if (computerCordsMemo.indexOf(valCo) !== -1 || playerCordsMemo.indexOf(valCo) !== -1) {
+        getNewCords();
+        console.log("I got new cords valCo - " + valCo);
+
+
+
+    } else {
+
+        if (valCo === "I") {
+            x = 150;
+            y = 150;
+        } else if (valCo === "II") {
+            y = 320;
+            x = 50;
+        } else if (valCo === "III") {
+            y = 500;
+            x = 150;
+        } else if (valCo === "IV") {
+            y = 150;
+            x = 350;
+        } else if (valCo === "V") {
+            y = 350;
+            x = 350;
+        } else if (valCo === "VI") {
+            y = 500;
+            x = 350;
+        } else if (valCo = "VII") {
+            y = 150;
+            x = 500;
+        } else if (valCo === "VIII") {
+            y = 340;
+            x = 500;
+        } else if (valCo === "IX") {
+            y = 500;
+            x = 500;
+        }
+    } //end of 1 else
+    //FUNCTION takes arrofwins check it agenst player arr an if any of small arr has  two position same than it makes vall the third mising position.  
+
+    console.log(x, y);
+    console.log("po funkcji positon to cords" + valCo);
+
+    computerCordsMemo.push(valCo);
+    arrCords = [x, y];
 }
 
-//start writing the logic;
-function computerMoves() {
 
-    getNewCords();
-    x = arrCords[0];
-    y = arrCords[1];
+// get random cords 
+function getNewCords() {
+
+    x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
+    y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
 
     if (y <= 171 && x <= 171) {
         valCo = "I";
@@ -116,20 +170,20 @@ function computerMoves() {
     } else if (y <= 530 && x <= 530) {
         valCo = "IX";
     }
-
-    while (computerCordsMemo.indexOf(valCo) === -1 && playerCordsMemo.indexOf(valCo) === -1) {
-
-        if (player === "cros") {
-            computerCordsMemo.push(valCo);
-            ring(arrCords[0], arrCords[1]);
-        } else {
-            computerCordsMemo.push(valCo);
-            eks(arrCords[0], arrCords[1]);
-        }
-    }
-
+    return valCo;
 }
 
+//works on computer movment;
+function computerMoves() {
+    getNewCords();
+    positionsToCords();
+
+    if (player === "cros") {
+        ring(arrCords[0], arrCords[1]);
+    } else {
+        eks(arrCords[0], arrCords[1]);
+    }
+}
 
 //gets mouse position
 function getMousePos(canvas, evt) {
@@ -147,6 +201,9 @@ function deblock() {
 
 //mousemove to get cors while moving mouse; get pos on click
 function playerClick() {
+
+    console.log("valCo: " + valCo);
+
     canvas.addEventListener('click', function (evt) {
         var mousePos = getMousePos(canvas, evt);
 
@@ -164,18 +221,14 @@ function playerClick() {
 
             taken = false;
 
-
-
         } else if (!cliked && taken === false) {
             playerCheckSpot(mousePos.x, mousePos.y);
             ring(mousePos.x, mousePos.y);
-            console.log(playerCordsMemo);
+
             //changes cliked so player can have only one move!
             cliked = true;
             taken = false;
         }
-
-
 
 
         if (computerClick === false) {
@@ -183,6 +236,7 @@ function playerClick() {
             if (computerCordsMemo.length < 4) {
                 // makes sure computer always draws an circle loops unitl it find the empty spot;
                 while (playerCordsMemo.length > computerCordsMemo.length) {
+                    getNewCords();
                     computerMoves();
                 }
             }
@@ -190,7 +244,6 @@ function playerClick() {
         }
 
     }, false);
-
 
 }
 
@@ -200,7 +253,7 @@ function isItTaken(x, y) {
         taken = true;
         valPl = "X";
 
-        //need to add restart from this spot!
+        //need to add restart player move from this spot! how?
     }
 }
 //cheks if player spots is empty
