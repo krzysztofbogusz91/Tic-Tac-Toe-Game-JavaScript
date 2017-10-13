@@ -1,8 +1,3 @@
-// notes to my self
-// need to write logic for computer moves
-// //need to add restart player move from this spot! how??
-
-
 var canvas = document.getElementById('myCanvas');
 var ctx = canvas.getContext('2d');
 
@@ -14,8 +9,7 @@ const cw = canvas.width;
 const ch = canvas.height;
 
 
-//sets game timmig;
-
+//sets game timmer;
 var inter = setInterval(game, 1000 / 60);
 
 
@@ -43,7 +37,7 @@ var valPl = "X";
 var taken = false;
 
 var winner = "";
-
+var positon = "";
 //array of winns positions for checkin and for Ai
 var arrOfWins = [["I", "II", "III"], ["IV", "V", "VI"], ["VII", "VIII", "IX"], ["I", "IV", "VII"], ["II", "V", "VIII"], ["III", "VI", "IX"], ["I", "V", "IX"], ["VII", "V", "III"]];
 
@@ -53,44 +47,39 @@ var arrPosibleMoves = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"];
 var aI;
 
 // as it said
-function isPlayerCloseToWinn() {
+function isCloseToWinn(arr) {
+    // arrPosibleMoves - aleredy gives the posible computer moves!!!
 
-    // Block player form winning
-    //clear arr`s and look if player is close to winning if so pass cords to blok this move
-    /*
-      
-        //in arrOf wins find a an arr that has two spots taken for win and put comp move there
-        //if taken take a random spot or computer winnig spot
+    var editMe = [];
 
-    IT IS COMPlitly not working
-        1. arrPosibleMoves - aleredy gives the posible computer moves!!!!
-   
-    var arrJa = arrOfWins.forEach(function (a, index) {
-        console.log("a: " + a + "index: " + index);
-        a = a.filter(function (b) {
-            console.log("b: " + b);
-            console.log(playerCordsMemo.indexOf(b) === -1);
-
-            if (playerCordsMemo.indexOf(b) === -1) {
-
-                return b;
-
-            }
-        });
-    }); */
+    arr.forEach(function (a) {
+        //sets up a safe var for testing;
+        editMe.push(a);
+    });
 
 
+    //check if it is not out of scope for later on!!!!
 
-    if (playerCordsMemo) {
-        var positon;
+    //test pushing vals to playerCordsMemoif winning than make it a new cords!
+    arrPosibleMoves.forEach(function (a) {
+        editMe.push(a);
+        console.log(victoryOptions(editMe) + " a:" + a + " editMe:" + editMe);
+
+        if (victoryOptions(editMe) === true) {
+            positon = a;
+            editMe.pop();
+        } else {
+            editMe.pop();
+        }
+    });
+
+    if (positon !== "") {
+        //return player winnig positon
         return positon;
     } else {
+        //if player won't winn in next move return false;
         return false;
     }
-
-    // console.log("after forEach: " + aI);
-
-
 }
 
 //starts computer move
@@ -130,15 +119,24 @@ function clearSpots() {
 
 function compLogic() {
 
-    //IT MUST BE HERE - NOW I GOT THIS KIND`A WORKING!!!
+    //updates empty spots;
     clearSpots();
-    //gets random posible choice and sets sup cords;
-    valCo = arrPosibleMoves[Math.floor(Math.random() * ((arrPosibleMoves.length - 1) - 0 + 1)) + 0];
 
 
-    //if player is close to win put valCo there;
+    if (isCloseToWinn(playerCordsMemo) === false) {
+        //gets random posible choice and sets sup cords;
+
+        valCo = arrPosibleMoves[Math.floor(Math.random() * ((arrPosibleMoves.length - 1) - 0 + 1)) + 0];
 
 
+    } else if (isCloseToWinn(playerCordsMemo) !== false && arrPosibleMoves.indexOf(positon) !== -1) {
+
+        //if player is close to win put valCo there and position is posible to move at
+        isCloseToWinn(playerCordsMemo);
+        valCo = positon;
+    } else {
+        valCo = arrPosibleMoves[Math.floor(Math.random() * ((arrPosibleMoves.length - 1) - 0 + 1)) + 0];
+    }
 
 
     if (valCo === "I") {
@@ -170,18 +168,19 @@ function compLogic() {
         x = 500;
     }
 
+    //updates computer memory spots;
     computerCordsMemo.push(valCo);
-
-    //push posible options here and than chose one at random
-    // ned to get it somwher up so we can use this to decide where put computer or write logic below think it troug?
+    //updates empty spots;
     clearSpots();
     console.log(arrPosibleMoves);
     console.log("ComputerLogic x,y" + x + y + valCo);
     return arrCords = [x, y];
 }
 
+//checks index's of computer and player memory for a passed val
 function isItNotTakenComputer(val) {
-    //add if computer first moves arr<5 if second <4
+
+
     if (computerCordsMemo.indexOf(val) === -1 && playerCordsMemo.indexOf(val) === -1) {
         return true;
     } else {
@@ -295,10 +294,7 @@ function isItTaken(x, y) {
 function victoryOptions(arr) {
 
 
-    if (arr.length >= 5) {
-        winner = "remis";
-        //jesli arr is a player who test it than winner will be player
-    }
+
     //looks for a winnig patern if there is one returns true
     if (arr.indexOf("I") >= 0 && arr.indexOf("II") >= 0 && arr.indexOf("III") >= 0 ||
         arr.indexOf("IV") >= 0 && arr.indexOf("V") >= 0 && arr.indexOf("VI") >= 0 ||
@@ -308,11 +304,7 @@ function victoryOptions(arr) {
         arr.indexOf("III") >= 0 && arr.indexOf("VI") >= 0 && arr.indexOf("IX") >= 0 ||
         arr.indexOf("I") >= 0 && arr.indexOf("V") >= 0 && arr.indexOf("IX") >= 0 ||
         arr.indexOf("VII") >= 0 && arr.indexOf("V") >= 0 && arr.indexOf("III") >= 0) {
-        if (arr === playerCordsMemo) {
-            winner = "player";
-        } else {
-            winner = "computer";
-        }
+
         return true;
 
     } else {
@@ -321,7 +313,17 @@ function victoryOptions(arr) {
 
 }
 
-function setUpWinner() {
+function setUpWinner(arr) {
+    //if computer moves first arr<5 if second <4
+    // check who is winning or if there is a remis.
+    if (arr.length > 5) {
+        winner = "remis";
+    } else if (arr === playerCordsMemo && victoryOptions(playerCordsMemo) === true) {
+        winner = "player";
+    } else if (arr !== playerCordsMemo && victoryOptions(computerCordsMemo) === true) {
+        winner = "computer";
+    }
+    //if finds a winner or remis restart game and clear all var`s
     if (winner === "remis") {
         alert(winner + "!");
         playerCordsMemo = [];
@@ -342,7 +344,7 @@ function setUpWinner() {
     }
 }
 
-//function for clearing up the board!
+//function for clearing up the board
 function clearAll() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     valCo = "X";
@@ -376,6 +378,7 @@ function lines() {
     ctx.fillStyle = 'green'
     ctx.fillRect(0, 364, 540, 4);
 }
+
 //draws x
 function eks(x, y) {
 
@@ -501,151 +504,6 @@ function game() {
     playerClick();
     computerMovesOne();
     deblock();
-    victoryOptions(playerCordsMemo);
-    victoryOptions(computerCordsMemo);
-    setUpWinner();
+    setUpWinner(playerCordsMemo);
+    setUpWinner(computerCordsMemo);
 }
-
-//OLD CODE! dell it later on
-/*
-
-// get random cords 
-function getNewCords() {
-
-    x = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-    y = Math.floor(Math.random() * (540 - 0 + 1)) + 0;
-
-    if (y <= 171 && x <= 171) {
-        valCo = "I";
-    } else if (y <= 171 && x <= 370) {
-        valCo = "IV";
-    } else if (y <= 171 && x <= 530) {
-        valCo = "VII";
-    } else if (y <= 350 && x <= 171) {
-        valCo = "II";
-    } else if (y <= 350 && x <= 370) {
-        valCo = "V";
-    } else if (y <= 350 && x <= 530) {
-        valCo = "VIII";
-    } else if (y <= 530 && x <= 171) {
-        valCo = "III";
-    } else if (y <= 530 && x <= 370) {
-        valCo = "VI";
-    } else if (y <= 530 && x <= 530) {
-        valCo = "IX";
-    }
-
-    console.log(valCo);
-    return arrCords = [x, y];
-
-} 
-//updates empty spots;
-function clearSpots() {
-    arrPosibleMoves = arrPosibleMoves.filter(function (a) {
-        if (isItNotTakenComputer(a)) {
-            return a;
-        }
-    });
-}
-
-function compLogic() {
-
-    //push posible options here and than chose one at random
-
-    //IT MUST BE HERE - NOW I GOT THIS KIND`A WORKING!!!
-    // getNewCords();
-    //if else is this random first move or computer starts thinking
-    /*
-       var loop = 0;
-       while (isItNotTakenComputer(valCo) === false) {
-           console.log("I got new cords :)");
-           loop++;
-           console.log("I loop: " + loop);
-           getNewCords();
-       }      
-          Now i can finaly start working on some real computer logic funcions seems to be set up fine
-
-              if (computerCordsMemo.length === 0 && playerCordsMemo.length === 0) {
-                  getNewCords();
-              } else if (computerCordsMemo.length !== 0 && playerCordsMemo.length !== 0) {
-                  //set new valCo and pass cords to the draw function
-                  // go trough player cords memo if close to any of small winn arr blok him
-                  //loook for empty spot isitNotTakenComputer if yes change vaCo
-                  //else
-                  // go trough computer cords memo make val closest to make computer win. 
-                  //else go to random spoot if any of this choices not good. 
-
-                  /* --- bad code think it through ---
-                  computerCordsMemo.forEach(function (a) {
-                      if (computerCordsMemo.indexOf(a) === -1) {
-                          computerChoicesArr.push(a);
-                      }
-                  });
-                  
-                  playerCordsMemo.forEach(function (a) {
-                      if (computerCordsMemo.indexOf(a) === -1 && playerCordsMemo.indexOf(a)) {
-                          computerChoicesArr.push(a);
-                      }
-               
-               });
-               
-               
-                  console.log("longer than 0");
-                  if (playerCordsMemo.indexOf("I") !== -1 && computerCordsMemo.indexOf("I") !== -1) {
-                      valCo = "IV";
-                      console.log("Im thinking");
-
-                  } else {
-                      getNewCords();
-                  }
-
-              }
-              
-    //push posible options here and than chose one at random
-
-    //IT MUST BE HERE - NOW I GOT THIS KIND`A WORKING!!!
-    clearSpots();
-
-    //gets random posible choice and sets sup cords;
-    valCo = arrPosibleMoves[Math.floor(Math.random() * ((arrPosibleMoves.length - 1) - 0 + 1)) + 0];
-
-
-    if (valCo === "I") {
-        x = 150;
-        y = 150;
-    } else if (valCo === "II") {
-        y = 320;
-        x = 50;
-    } else if (valCo === "III") {
-        y = 500;
-        x = 150;
-    } else if (valCo === "IV") {
-        y = 150;
-        x = 350;
-    } else if (valCo === "V") {
-        y = 350;
-        x = 350;
-    } else if (valCo === "VI") {
-        y = 500;
-        x = 350;
-    } else if (valCo === "VII") {
-        y = 150;
-        x = 500;
-    } else if (valCo === "VIII") {
-        y = 340;
-        x = 500;
-    } else if (valCo === "IX") {
-        y = 500;
-        x = 500;
-    }
-
-    computerCordsMemo.push(valCo);
-
-    //push posible options here and than chose one at random
-    // ned to get it somwher up so we can use this to decide where put computer or write logic below think it troug?
-    clearSpots();
-    console.log(arrPosibleMoves);
-    console.log("ComputerLogic x,y" + x + y + valCo);
-    return arrCords = [x, y];
-}
-*/
