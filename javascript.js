@@ -1,8 +1,4 @@
-// notes to my self
-// need to write logic for computer moves
-// //need to add restart player move from this spot! how??
-
-
+// -- Canvas and game --//
 var canvas = document.getElementById('myCanvas');
 var ctx = canvas.getContext('2d');
 
@@ -14,8 +10,7 @@ const cw = canvas.width;
 const ch = canvas.height;
 
 
-//sets game timmig;
-
+//sets game timmer;
 var inter = setInterval(game, 1000 / 60);
 
 
@@ -43,33 +38,46 @@ var valPl = "X";
 var taken = false;
 
 var winner = "";
-
+var positon = "";
 //array of winns positions for checkin and for Ai
 var arrOfWins = [["I", "II", "III"], ["IV", "V", "VI"], ["VII", "VIII", "IX"], ["I", "IV", "VII"], ["II", "V", "VIII"], ["III", "VI", "IX"], ["I", "V", "IX"], ["VII", "V", "III"]];
-
+// arrPosibleMoves - gives the posible computer or player moves!
 var arrPosibleMoves = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"];
 
 
 var aI;
 
-// as it said
-function isPlayerCloseToWinn() {
-    /*
-    
-        1. arrPosibleMoves - aleredy gives the posible computer moves!!!!
-   
-    */
+/* -- Menu options --
+var prom;
 
+window.onload(crosOrCirc());
+
+
+function crosOrCirc() {
+    prom = prompt("Do you want play as X? y/n");
+
+    if (prom === "Y" || prom === "y" || prom === "yes" || prom === "YES") {
+
+        player = "cros";
+    } else {
+
+        player = "circ";
+    }
+}
+
+*/
+// -- Canvas and game --//
+
+// check if pased aray is close to winnig position
+function isCloseToWinn(arr) {
+    //for manpulating the give arr
     var editMe = [];
 
-    playerCordsMemo.forEach(function (a) {
+    arr.forEach(function (a) {
         //sets up a safe var for testing;
         editMe.push(a);
     });
 
-
-    //check if it is not out of scope for later on!!!!
-    var positon = "";
     //test pushing vals to playerCordsMemoif winning than make it a new cords!
     arrPosibleMoves.forEach(function (a) {
         editMe.push(a);
@@ -90,23 +98,19 @@ function isPlayerCloseToWinn() {
         //if player won't winn in next move return false;
         return false;
     }
-
-    // console.log("after forEach: " + aI);
-
-
 }
 
 //starts computer move
 function computerMovesOne() {
 
     if (computerClick === false) {
-        // prevents from blocking player move on the last spot may be need to change for the first player when comp starts than player has 4 moves....
-        if (computerCordsMemo.length < 4) {
-            // makes sure computer always draws an circle loops unitl it find the empty spot;
-            while (playerCordsMemo.length > computerCordsMemo.length) {
-                computerDraws();
-            }
+        // makes sure computer always draws an circle loops unitl it find the empty spot;
+
+        //if computer moves first than just switch for >=
+        while (playerCordsMemo.length > computerCordsMemo.length) {
+            computerDraws();
         }
+
         computerClick = true;
     }
 
@@ -133,15 +137,28 @@ function clearSpots() {
 
 function compLogic() {
 
-    //IT MUST BE HERE - NOW I GOT THIS KIND`A WORKING!!!
+    //updates empty spots;
     clearSpots();
-    //gets random posible choice and sets sup cords;
-    valCo = arrPosibleMoves[Math.floor(Math.random() * ((arrPosibleMoves.length - 1) - 0 + 1)) + 0];
+
+    //ADD isCloseToWinn for a computer and if comp is close to winn than pas the val as current
+    //computer need to drive to winn over blocking player if he moves first
+    //first if is unstable? need to check, all below working fine...
+    if (isCloseToWinn(computerCordsMemo) !== false && arrPosibleMoves.indexOf(isCloseToWinn(computerCordsMemo)) !== -1) {
+        valCo = positon;
+    } else if (isCloseToWinn(playerCordsMemo) === false) {
+        //gets random posible choice and sets sup cords;
+
+        valCo = arrPosibleMoves[Math.floor(Math.random() * ((arrPosibleMoves.length - 1) - 0 + 1)) + 0];
 
 
-    //if player is close to win put valCo there;
+    } else if (isCloseToWinn(playerCordsMemo) !== false && arrPosibleMoves.indexOf(positon) !== -1) {
 
-
+        //if player is close to win put valCo there and position is posible to move at
+        isCloseToWinn(playerCordsMemo);
+        valCo = positon;
+    } else {
+        valCo = arrPosibleMoves[Math.floor(Math.random() * ((arrPosibleMoves.length - 1) - 0 + 1)) + 0];
+    }
 
 
     if (valCo === "I") {
@@ -173,18 +190,19 @@ function compLogic() {
         x = 500;
     }
 
+    //updates computer memory spots;
     computerCordsMemo.push(valCo);
-
-    //push posible options here and than chose one at random
-    // ned to get it somwher up so we can use this to decide where put computer or write logic below think it troug?
+    //updates empty spots;
     clearSpots();
     console.log(arrPosibleMoves);
     console.log("ComputerLogic x,y" + x + y + valCo);
     return arrCords = [x, y];
 }
 
+//checks index's of computer and player memory for a passed val
 function isItNotTakenComputer(val) {
-    //add if computer first moves arr<5 if second <4
+
+
     if (computerCordsMemo.indexOf(val) === -1 && playerCordsMemo.indexOf(val) === -1) {
         return true;
     } else {
@@ -318,7 +336,8 @@ function victoryOptions(arr) {
 }
 
 function setUpWinner(arr) {
-
+    //if computer moves first arr<5 if second <4
+    // check who is winning or if there is a remis.
     if (arr.length > 5) {
         winner = "remis";
     } else if (arr === playerCordsMemo && victoryOptions(playerCordsMemo) === true) {
@@ -326,7 +345,7 @@ function setUpWinner(arr) {
     } else if (arr !== playerCordsMemo && victoryOptions(computerCordsMemo) === true) {
         winner = "computer";
     }
-
+    //if finds a winner or remis restart game and clear all var`s
     if (winner === "remis") {
         alert(winner + "!");
         playerCordsMemo = [];
@@ -347,7 +366,7 @@ function setUpWinner(arr) {
     }
 }
 
-//function for clearing up the board!
+//function for clearing up the board
 function clearAll() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     valCo = "X";
@@ -381,6 +400,7 @@ function lines() {
     ctx.fillStyle = 'green'
     ctx.fillRect(0, 364, 540, 4);
 }
+
 //draws x
 function eks(x, y) {
 
@@ -504,7 +524,7 @@ function ring(x, y) {
 function game() {
     lines();
     playerClick();
-    computerMovesOne();
+    computerMovesOne()
     deblock();
     setUpWinner(playerCordsMemo);
     setUpWinner(computerCordsMemo);
