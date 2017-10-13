@@ -47,11 +47,10 @@ var arrPosibleMoves = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"];
 
 var aI;
 
-/* -- Menu options --
+/* -- Menu options --*/
 var prom;
 
 window.onload(crosOrCirc());
-
 
 function crosOrCirc() {
     prom = prompt("Do you want play as X? y/n");
@@ -65,7 +64,7 @@ function crosOrCirc() {
     }
 }
 
-*/
+
 // -- Canvas and game --//
 
 // check if pased aray is close to winnig position
@@ -336,9 +335,8 @@ function victoryOptions(arr) {
 }
 
 function setUpWinner(arr) {
-    //if computer moves first arr<5 if second <4
-    // check who is winning or if there is a remis.
-    if (arr.length > 5) {
+    //set up who is a winner;
+    if (arrPosibleMoves.length === 0) {
         winner = "remis";
     } else if (arr === playerCordsMemo && victoryOptions(playerCordsMemo) === true) {
         winner = "player";
@@ -522,10 +520,13 @@ function ring(x, y) {
 
 //draws a game
 function game() {
+    setUpWinner(playerCordsMemo);
+    setUpWinner(computerCordsMemo);
     lines();
     playerClick();
     computerMovesOne()
     deblock();
-    setUpWinner(playerCordsMemo);
-    setUpWinner(computerCordsMemo);
+
+
+    //add winn screen like in tenis game on codepen... just make background the last cords of all;
 }
