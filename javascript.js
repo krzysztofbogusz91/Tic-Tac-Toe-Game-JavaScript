@@ -55,15 +55,21 @@ function isPlayerCloseToWinn() {
 
     // Block player form winning
     //clear arr`s and look if player is close to winning if so pass cords to blok this move
-    aI = arrOfWins;
-    console.log("aI: " + aI);
-    aI = arrOfWins.map(function (a, index) {
+    /*
+      
+        //in arrOf wins find a an arr that has two spots taken for win and put comp move there
+        //if taken take a random spot or computer winnig spot
+
+    IT IS COMPlitly not working
+        
+    */
+    var arrJa = arrOfWins.forEach(function (a, index) {
         console.log("a: " + a + "index: " + index);
-        return a = a.filter(function (b) {
+        a = a.filter(function (b) {
             console.log("b: " + b);
             console.log(playerCordsMemo.indexOf(b) === -1);
 
-            if (playerCordsMemo.indexOf(b) === -1 || computerCordsMemo.indexOf(b) === -1) {
+            if (playerCordsMemo.indexOf(b) === -1) {
 
                 return b;
 
@@ -71,16 +77,10 @@ function isPlayerCloseToWinn() {
         });
     });
 
-    //still not working wery well should return only one or two arr max
-    aI = aI.filter(function (c) {
-        if (c.length === 1) {
-            return c;
-        }
-    });
+    return arrJa;
+    // console.log("after forEach: " + aI);
 
-    //end of block player winn
-    console.log("aI: " + aI);
-    return aI;
+
 }
 
 //starts computer move
@@ -125,11 +125,10 @@ function compLogic() {
     //gets random posible choice and sets sup cords;
     valCo = arrPosibleMoves[Math.floor(Math.random() * ((arrPosibleMoves.length - 1) - 0 + 1)) + 0];
 
-    isPlayerCloseToWinn();
+
     //if player is close to win put valCo there;
-    if (!aI) {
-        valCo = aI[Math.floor(Math.random() * ((arrPosibleMoves.length - 1) - 0 + 1)) + 0];
-    }
+
+
 
 
     if (valCo === "I") {
