@@ -1,3 +1,4 @@
+// -- Canvas and game --//
 var canvas = document.getElementById('myCanvas');
 var ctx = canvas.getContext('2d');
 
@@ -46,6 +47,26 @@ var arrPosibleMoves = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"];
 
 var aI;
 
+/* -- Menu options --*/
+var prom;
+
+window.onload(crosOrCirc());
+
+function crosOrCirc() {
+    prom = prompt("Do you want play as X? y/n");
+
+    if (prom === "Y" || prom === "y" || prom === "yes" || prom === "YES") {
+
+        player = "cros";
+    } else {
+
+        player = "circ";
+    }
+}
+
+
+// -- Canvas and game --//
+
 // check if pased aray is close to winnig position
 function isCloseToWinn(arr) {
     //for manpulating the give arr
@@ -82,13 +103,13 @@ function isCloseToWinn(arr) {
 function computerMovesOne() {
 
     if (computerClick === false) {
-        // prevents from blocking player move on the last spot may be need to change for the first player when comp starts than player has 4 moves....
-        if (computerCordsMemo.length < 4) {
-            // makes sure computer always draws an circle loops unitl it find the empty spot;
-            while (playerCordsMemo.length > computerCordsMemo.length) {
-                computerDraws();
-            }
+        // makes sure computer always draws an circle loops unitl it find the empty spot;
+
+        //if computer moves first than just switch for >=
+        while (playerCordsMemo.length > computerCordsMemo.length) {
+            computerDraws();
         }
+
         computerClick = true;
     }
 
@@ -120,8 +141,10 @@ function compLogic() {
 
     //ADD isCloseToWinn for a computer and if comp is close to winn than pas the val as current
     //computer need to drive to winn over blocking player if he moves first
-
-    if (isCloseToWinn(playerCordsMemo) === false) {
+    //first if is unstable? need to check, all below working fine...
+    if (isCloseToWinn(computerCordsMemo) !== false && arrPosibleMoves.indexOf(isCloseToWinn(computerCordsMemo)) !== -1) {
+        valCo = positon;
+    } else if (isCloseToWinn(playerCordsMemo) === false) {
         //gets random posible choice and sets sup cords;
 
         valCo = arrPosibleMoves[Math.floor(Math.random() * ((arrPosibleMoves.length - 1) - 0 + 1)) + 0];
@@ -312,9 +335,8 @@ function victoryOptions(arr) {
 }
 
 function setUpWinner(arr) {
-    //if computer moves first arr<5 if second <4
-    // check who is winning or if there is a remis.
-    if (arr.length > 5) {
+    //set up who is a winner;
+    if (arrPosibleMoves.length === 0) {
         winner = "remis";
     } else if (arr === playerCordsMemo && victoryOptions(playerCordsMemo) === true) {
         winner = "player";
@@ -498,10 +520,13 @@ function ring(x, y) {
 
 //draws a game
 function game() {
-    lines();
-    playerClick();
-    computerMovesOne();
-    deblock();
     setUpWinner(playerCordsMemo);
     setUpWinner(computerCordsMemo);
+    lines();
+    playerClick();
+    computerMovesOne()
+    deblock();
+
+
+    //add winn screen like in tenis game on codepen... just make background the last cords of all;
 }
