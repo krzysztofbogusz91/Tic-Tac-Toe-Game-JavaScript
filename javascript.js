@@ -40,25 +40,21 @@ var winner = "";
 var positon = "";
 //array of winns positions for checkin and for Ai
 var arrOfWins = [["I", "II", "III"], ["IV", "V", "VI"], ["VII", "VIII", "IX"], ["I", "IV", "VII"], ["II", "V", "VIII"], ["III", "VI", "IX"], ["I", "V", "IX"], ["VII", "V", "III"]];
-
+// arrPosibleMoves - gives the posible computer or player moves!
 var arrPosibleMoves = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"];
 
 
 var aI;
 
-// as it said
+// check if pased aray is close to winnig position
 function isCloseToWinn(arr) {
-    // arrPosibleMoves - aleredy gives the posible computer moves!!!
-
+    //for manpulating the give arr
     var editMe = [];
 
     arr.forEach(function (a) {
         //sets up a safe var for testing;
         editMe.push(a);
     });
-
-
-    //check if it is not out of scope for later on!!!!
 
     //test pushing vals to playerCordsMemoif winning than make it a new cords!
     arrPosibleMoves.forEach(function (a) {
@@ -122,6 +118,8 @@ function compLogic() {
     //updates empty spots;
     clearSpots();
 
+    //ADD isCloseToWinn for a computer and if comp is close to winn than pas the val as current
+    //computer need to drive to winn over blocking player if he moves first
 
     if (isCloseToWinn(playerCordsMemo) === false) {
         //gets random posible choice and sets sup cords;
