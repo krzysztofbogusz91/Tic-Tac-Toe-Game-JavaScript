@@ -9,10 +9,8 @@ canvas.height = 540;
 const cw = canvas.width;
 const ch = canvas.height;
 
-
 //sets game timmer;
 var inter = setInterval(game, 1000 / 60);
-
 
 var player = "cros";
 var computer = "circle";
@@ -49,18 +47,32 @@ var aI;
 
 /* -- Menu options --*/
 var prom;
+var showingMenu = true;
+var showingWinScreen = false;
 
-window.onload(crosOrCirc());
-
-function crosOrCirc() {
-    prom = prompt("Do you want play as X? y/n");
-
-    if (prom === "Y" || prom === "y" || prom === "yes" || prom === "YES") {
-
+window.addEventListener('keydown', this.keyPress);
+canvas.addEventListener('mousedown', handleMouseClick);
+//on key press chose o||x
+function keyPress(e) {
+    var code = e.keyCode;
+    console.log(code);
+    if (code === 89) {
         player = "cros";
+        showingMenu = false;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
     } else {
 
         player = "circ";
+        showingMenu = false;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+}
+//on click start new game
+function handleMouseClick(evt) {
+    if (showingWinScreen) {
+        showingWinScreen = false;
+        clearAll();
     }
 }
 
@@ -135,30 +147,21 @@ function clearSpots() {
 }
 
 function compLogic() {
-
     //updates empty spots;
     clearSpots();
-
-    //ADD isCloseToWinn for a computer and if comp is close to winn than pas the val as current
-    //computer need to drive to winn over blocking player if he moves first
-    //first if is unstable? need to check, all below working fine...
+    //computer shift to winning position if he see that this is winnig spot;
     if (isCloseToWinn(computerCordsMemo) !== false && arrPosibleMoves.indexOf(isCloseToWinn(computerCordsMemo)) !== -1) {
         valCo = positon;
     } else if (isCloseToWinn(playerCordsMemo) === false) {
         //gets random posible choice and sets sup cords;
-
         valCo = arrPosibleMoves[Math.floor(Math.random() * ((arrPosibleMoves.length - 1) - 0 + 1)) + 0];
-
-
     } else if (isCloseToWinn(playerCordsMemo) !== false && arrPosibleMoves.indexOf(positon) !== -1) {
-
-        //if player is close to win put valCo there and position is posible to move at
+        //if player is close to win put valCo there to block
         isCloseToWinn(playerCordsMemo);
         valCo = positon;
     } else {
         valCo = arrPosibleMoves[Math.floor(Math.random() * ((arrPosibleMoves.length - 1) - 0 + 1)) + 0];
     }
-
 
     if (valCo === "I") {
         x = 150;
@@ -200,8 +203,6 @@ function compLogic() {
 
 //checks index's of computer and player memory for a passed val
 function isItNotTakenComputer(val) {
-
-
     if (computerCordsMemo.indexOf(val) === -1 && playerCordsMemo.indexOf(val) === -1) {
         return true;
     } else {
@@ -220,8 +221,6 @@ function getMousePos(canvas, evt) {
 
 //mousemove to get cors while moving mouse; get pos on click
 function playerClick() {
-
-    console.log("valCo: " + valCo);
 
     canvas.addEventListener('click', function (evt) {
         var mousePos = getMousePos(canvas, evt);
@@ -253,7 +252,7 @@ function playerClick() {
 
 }
 
-
+//function for updating player memory
 function playerCheckSpot(x, y) {
 
     if (y <= 171 && x <= 171) {
@@ -294,10 +293,6 @@ function playerCheckSpot(x, y) {
 
     }
 
-    console.log("valPl: " + valPl);
-    console.log("valCo: " + valCo);
-
-
 }
 
 //cheks if player spots is empty
@@ -311,12 +306,9 @@ function isItTaken(x, y) {
     }
 }
 
-//will look trough arrays for pattern maching if any of winng options will exisit it will pass mesege;
+//looks for a winnig patern if there is one returns true
 function victoryOptions(arr) {
 
-
-
-    //looks for a winnig patern if there is one returns true
     if (arr.indexOf("I") >= 0 && arr.indexOf("II") >= 0 && arr.indexOf("III") >= 0 ||
         arr.indexOf("IV") >= 0 && arr.indexOf("V") >= 0 && arr.indexOf("VI") >= 0 ||
         arr.indexOf("VII") >= 0 && arr.indexOf("VIII") >= 0 && arr.indexOf("IX") >= 0 ||
@@ -325,9 +317,7 @@ function victoryOptions(arr) {
         arr.indexOf("III") >= 0 && arr.indexOf("VI") >= 0 && arr.indexOf("IX") >= 0 ||
         arr.indexOf("I") >= 0 && arr.indexOf("V") >= 0 && arr.indexOf("IX") >= 0 ||
         arr.indexOf("VII") >= 0 && arr.indexOf("V") >= 0 && arr.indexOf("III") >= 0) {
-
         return true;
-
     } else {
         return false;
     }
@@ -345,22 +335,25 @@ function setUpWinner(arr) {
     }
     //if finds a winner or remis restart game and clear all var`s
     if (winner === "remis") {
-        alert(winner + "!");
+
+        showingWinScreen = true;
         playerCordsMemo = [];
         computerCordsMemo = [];
-        clearAll();
+
 
     } else if (winner === "player") {
-        alert(winner + " " + "wins the game!");
+
+        showingWinScreen = true;
         playerCordsMemo = [];
         computerCordsMemo = [];
-        clearAll();
+
 
     } else if (winner === "computer") {
-        alert(winner + " " + "wins the game!");
+
+        showingWinScreen = true;
         playerCordsMemo = [];
         computerCordsMemo = [];
-        clearAll();
+
     }
 }
 
@@ -381,22 +374,49 @@ function deblock() {
     cliked = false;
     computerClick = false;
 }
-
-
 //draws board lines
 function lines() {
-    //lines Y
-    ctx.fillStyle = 'green'
-    ctx.fillRect(174, 0, 4, 540);
-    ctx.fillStyle = 'green'
-    ctx.fillRect(364, 0, 4, 540);
+    //draws winnig screen
+    if (showingWinScreen === true) {
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, canvas.height, canvas.width);
+        ctx.fillStyle = "white";
+        ctx.font = 'bold 50px Calibri';
+        if (winner === "remis") {
+            ctx.fillText(winner, 110, 200);
+        } else {
+            ctx.fillText(winner + " wins!!!", 110, 200);
+        }
 
-    //linesX
-    ctx.fillStyle = 'green'
-    ctx.fillRect(0, 174, 540, 4);
+        ctx.font = 'italic 20px Calibri';
+        ctx.fillText("click to continue", 10, 400);
+        //draws menu start
+    } else if (showingMenu === true) {
 
-    ctx.fillStyle = 'green'
-    ctx.fillRect(0, 364, 540, 4);
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, canvas.height, canvas.width);
+        ctx.fillStyle = "white";
+        ctx.font = 'bold 120px Calibri';
+        ctx.fillText("X || O", 110, 200);
+        ctx.font = 'italic 25px Calibri';
+        ctx.fillText("Do you want play as X ? Y / N", 10, 300);
+        ctx.fillText("press button Y/N to continue as an X!", 10, 400);
+
+        return;
+        //draws game
+    } else if (showingMenu === false) {
+
+        //lines Y
+        ctx.fillStyle = 'green'
+        ctx.fillRect(174, 0, 4, 540);
+        ctx.fillStyle = 'green'
+        ctx.fillRect(364, 0, 4, 540);
+        //linesX
+        ctx.fillStyle = 'green'
+        ctx.fillRect(0, 174, 540, 4);
+        ctx.fillStyle = 'green'
+        ctx.fillRect(0, 364, 540, 4);
+    }
 }
 
 //draws x
@@ -517,16 +537,14 @@ function ring(x, y) {
     ctx.strokeStyle = "black";
 }
 
-
 //draws a game
 function game() {
     setUpWinner(playerCordsMemo);
     setUpWinner(computerCordsMemo);
     lines();
-    playerClick();
-    computerMovesOne()
-    deblock();
-
-
-    //add winn screen like in tenis game on codepen... just make background the last cords of all;
+    if (showingMenu === false) {
+        playerClick();
+        computerMovesOne()
+        deblock();
+    }
 }
